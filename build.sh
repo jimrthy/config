@@ -1,12 +1,12 @@
 #!/bin/sh
 sudo apt-get install vim emacs zsh git tmux ssh
 
-cp .gitconfig ~
-cp .gitignore_global ~
+cp gitconfig ~/.gitconfig
+cp gitignore_global ~/.gitignore_global 
 mkdir ~/.ssh
 cp open-wide.pem ~/.ssh
 cp ssh.config ~/.ssh/config
-cp .tmux.conf ~
-cp .vimrc ~
-cp .zshrc ~
+cp tmux.conf ~/.tmux.conf 
+cp vimrc ~/.vimrc 
+cp zshrc ~/.zshrc 
 
