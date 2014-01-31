@@ -11,11 +11,18 @@ cp gitignore_global ~/.gitignore_global
 if [ ! -d ~/.ssh ]; then
   mkdir ~/.ssh;
 fi
+
+echo "Setting up oh-my-zsh"
+wget --no-check-certificate https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+cp jimrthy.zsh-theme ~/.oh-my-zsh/themes
+cp ~/.zshrc ~/zshrc.original
+cp zshrc ~/.zshrc 
+
 cp open-wide.pem ~/.ssh
 cp ssh.config ~/.ssh/config
 cp tmux.conf ~/.tmux.conf 
 cp vimrc ~/.vimrc 
-cp zshrc ~/.zshrc 
+
 
 chsh -s /usr/bin/zsh
 
