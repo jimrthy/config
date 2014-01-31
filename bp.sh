@@ -1,14 +1,20 @@
-#! /bin/sh
+#! /bin/bash
 
-source ./build.sh
+# N.B. It's important for this to be run from the /home/bp directory.
+
+./build.sh
 
 # Clone the webapp source
 cd ~
 mv webapp webapp.initial
-mkdir projects
+if [ ! -f projects ]; then
+  mkdir projects;
+fi
+cd
+
 cd projects
 git clone ssh://Tarpon/usr/local/share/bp.git
-cd ..
+cd 
 ln -s projects/bp webapp
 sudo supervisorctl restart all
 
