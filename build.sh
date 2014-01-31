@@ -4,11 +4,11 @@
 # needs to happen once. It's idempotent, so it won't
 # hurt to call it multiple times, but it's a useless
 # time sink
-sudo apt-get install vim emacs zsh git tmux ssh svn
+sudo apt-get install vim emacs zsh git tmux ssh subversion
 
 cp gitconfig ~/.gitconfig
 cp gitignore_global ~/.gitignore_global 
-if [ ! -f ~/.ssh]; then
+if [ ! -d ~/.ssh]; then
   mkdir ~/.ssh;
 fi
 cp open-wide.pem ~/.ssh

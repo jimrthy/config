@@ -9,7 +9,7 @@ echo "Installing must-have packages"
 echo "Cloning webapp repo"
 cd ~
 mv webapp webapp.initial
-if [ ! -f projects ]; then
+if [ ! -d projects ]; then
   mkdir projects;
 fi
 cd
