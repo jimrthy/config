@@ -4,7 +4,7 @@
 # needs to happen once. It's idempotent, so it won't
 # hurt to call it multiple times, but it's a useless
 # time sink
-sudo apt-get install vim emacs zsh git tmux ssh subversion
+sudo apt-get install vim emacs zsh git tmux ssh subversion lxc python-dev python-pip
 
 cp gitconfig ~/.gitconfig
 cp gitignore_global ~/.gitignore_global 
