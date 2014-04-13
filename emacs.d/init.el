@@ -1,6 +1,3 @@
-;;; I *strongly* suspect that this file is preventing
-;;; ~/.emacs.d/init.el from loading.
-;;; FIXME: What's a good way to double-check that?
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
