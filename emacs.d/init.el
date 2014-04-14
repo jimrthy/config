@@ -17,10 +17,47 @@
  '(font-lock-type-face ((t (:foreground "brightblack"))))
  '(font-lock-variable-name-face ((t (:foreground "color-52")))))
 
+;;; My vital packages!
+(require 'package)
+;; TODO: Eliminate one of these or the other
+(add-to-list 'package-archives
+	     '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+
+(defvar my-packages '(cider
+		      clojure-mode
+		      clojure-project-mode
+		      clojurescript-mode
+		      magit
+		      paredit))
+
+;; Take this away for now, to try to speed up start time
+(when nil (dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p))))
+
+;;; Clojurescript files should be edited in clojure-mode
+(add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
+
+(autoload 'enable-paredit-mode "paredit" 
+  "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+
+;;; Org-mode customizations
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d)" "DELEGATED(g)")
+	(sequence "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
+	(sequence "|" "CANCELLED(c)" "DEFERRED(r)")))
+; Mark the timestamp a task completed
+(setq org-log-done 'time)
+
 ;; Magic key combinations for working inside tmux over ssh
 ;; put the following line in your ~/.tmux.conf:
 ;;   setw -g xterm-keys on
-(if (getenv "TMUX")
+(when (getenv "TMUX")
     (progn
       (let ((x 2) (tkey ""))
 	(while (<= x 8)
@@ -104,4 +141,4 @@
 	  ;; f20
 	  (define-key key-translation-map (kbd (format "M-[ 34 ; %d ~" x)) (kbd (format "%s<f20>" tkey)))
 
-	  (setq x (+ x 1)))))
+	  (setq x (+ x 1))))))
