@@ -45,6 +45,7 @@
 (autoload 'enable-paredit-mode "paredit" 
   "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'clojure-mode-hook 'paredit-mode)
 
 ;;; Org-mode customizations
 (setq org-todo-keywords
