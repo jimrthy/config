@@ -22,19 +22,16 @@
 ;; TODO: Eliminate one of these or the other
 (add-to-list 'package-archives
 	     '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
 (defvar my-packages '(cider
 		      clojure-mode
-		      clojure-project-mode
 		      clojurescript-mode
 		      magit
 		      paredit))
 
 ;; Take this away for now, to try to speed up start time
-(when nil (dolist (p my-packages)
+(when t (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p))))
 
