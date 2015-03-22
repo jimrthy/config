@@ -16,10 +16,12 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 export "PATH=$PATH:/usr/local/bin:$HOME/bin"
 
-EDITOR=vim
+export EDITOR=vim
 source /usr/local/bin/virtualenvwrapper.sh
 
 # This is a matter of taste. Some people actually like having their
 # shells share all the history.
 setopt inc_append_history
 setopt no_share_history
+
+cowsay `fortune -a`

@@ -10,19 +10,34 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(font-lock-builtin-face ((t (:foreground "cyan"))))
- '(font-lock-constant-face ((t (:foreground "color-32"))))
- '(font-lock-function-name-face ((t (:foreground "blue"))))
+ '(font-lock-comment-face ((t (:foreground "medium blue"))))
+ '(font-lock-constant-face ((t (:foreground "red"))))
+ '(font-lock-function-name-face ((t (:foreground "medium blue"))))
  '(font-lock-keyword-face ((t (:foreground "brightred"))))
- '(font-lock-string-face ((t (:foreground "color-28"))))
+ '(font-lock-string-face ((t (:foreground "indian red"))))
  '(font-lock-type-face ((t (:foreground "brightblack"))))
- '(font-lock-variable-name-face ((t (:foreground "color-52")))))
+ '(font-lock-variable-name-face ((t (:foreground "color-52"))))
+ '(org-date ((t (:foreground "black" :underline t))))
+ '(org-level-3 ((t (:inherit outline-3 :foreground "color-28"))))
+ '(org-level-4 ((t (:inherit nil :foreground "color-54")))))
+
+
+;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
+;;; There are some interesting-looking settings in there.
 
 ;;; My vital packages!
 (require 'package)
-;; TODO: Eliminate one of these or the other
-(add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; Apparently I want this if I'm going to be running
+;; package-initialize myself
+(setq package-enable-at-startup nil)
+;; There are interesting debates about marmalade vs. melpa.
+(when nil (add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/")))
+(when t (add-to-list 'package-archives
+		     '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t))
 (package-initialize)
+(when (not package-archive-contents)
+  (package-refresh-contents))
 
 (defvar my-packages '(cider
 		      clojure-mode
@@ -35,6 +50,8 @@
   (when (not (package-installed-p p))
     (package-install p))))
 
+;;;; Clojure
+
 ;;; Clojurescript files should be edited in clojure-mode
 (add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
@@ -43,6 +60,43 @@
   "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'clojure-mode-hook 'paredit-mode)
+
+(require 'eldoc)
+(eldoc-add-command
+  'paredit-backward-delete
+  'paredit-close-round)
+
+;; Recommendations from the nrepl README:
+
+; eldoc (shows the args to whichever function you're calling):
+(add-hook 'cider-interaction-mode-hook
+          'cider-turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+
+;; turn off auto-complete with tab
+; (it recommends using M-tab instead)
+(setq cider-tab-command 'indent-for-tab-command)
+(setq cider-repl-tab-command 'indent-for-tab-command)
+
+;; Make C-c C-z switch to *cider repl* in current window:
+(when nil (setq cider-repl-display-in-current-window t))
+;; I've changed from that to this, but it seems wrong
+(setq cider-xrepl-display-in-current-window t)
+
+;; Camel Casing
+(when t (add-hook 'cider-mode-hook 'subword-mode))
+
+;; Use standard clojure-mode faces inside repl:
+(setq cider-repl-use-clojure-font-lock t)
+
+;; paredit in nrepl (I'm very torn about this one):
+;; No I'm not. Paredit's great for structuring code, but it leaves a lot to be
+;; desired in interactive mode.
+;; Especially under something like TMUX.
+;;(add-hook 'nrepl-mode-hook 'paredit-mode)
+
+(setq nrepl-log-messages t)
+
 
 ;;; Org-mode customizations
 (setq org-todo-keywords
