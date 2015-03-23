@@ -41,7 +41,6 @@
 
 (defvar my-packages '(cider
 		      clojure-mode
-		      clojurescript-mode
 		      magit
 		      paredit))
 
