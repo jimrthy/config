@@ -31,7 +31,9 @@
 ;; package-initialize myself
 (setq package-enable-at-startup nil)
 ;; There are interesting debates about marmalade vs. melpa.
-(when nil (add-to-list 'package-archives
+;; These days, there don't seem to be any significant reasons
+;; to not include both
+(when t (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/")))
 (when t (add-to-list 'package-archives
 		     '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t))
@@ -41,7 +43,6 @@
 
 (defvar my-packages '(cider
 		      clojure-mode
-		      clojurescript-mode
 		      magit
 		      paredit))
 
