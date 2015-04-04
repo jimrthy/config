@@ -54,7 +54,8 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[jonase/eastwood "0.2.1"]
+        :plugins [[com.jakemccrary/lein-test-refresh "0.7.0"]
+                  [jonase/eastwood "0.2.1"]
                   [lein-ancient "0.5.5" :exclusions [cheshire common-codec commons-codec slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
                   ;; TODO: Update!

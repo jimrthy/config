@@ -44,7 +44,8 @@
 (defvar my-packages '(cider
 		      clojure-mode
 		      magit
-		      paredit))
+		      paredit
+		      paxedit))
 
 ;; Take this away for now, to try to speed up start time
 (when t (dolist (p my-packages)
@@ -62,14 +63,32 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'clojure-mode-hook 'paredit-mode)
 
+;;; Probationary paxedit configuration
+(require 'paxedit)
+(add-hook 'emacs-lisp-mode-hook 'paxedit-mode)
+(add-hook 'clojure-mode-hook 'paxedit-mode)
+(eval-after-load "paxedit"
+  '(progn (define-key paxedit-mode-map (kbd "M-<right>") 'paxedit-transpose-forward)
+	  (define-key paxedit-mode-map (kbd "M-<left>") 'paxedit-transpose-backward)
+	  (define-key paxedit-mode-map (kbd "M-<up>") 'paxedit-backward-up)
+	  (define-key paxedit-mode-map (kbd "M-<down>") 'paxedit-backward-end)
+	  (define-key paxedit-mode-map (kbd "M-b") 'paxedit-previous-symbol)
+	  (define-key paxedit-mode-map (kbd "M-f") 'paxedit-next-symbol)
+	  (define-key paxedit-mode-map (kbd "C-%") 'paxedit-copy)
+	  (define-key paxedit-mode-map (kbd "C-&") 'paxedit-kill)
+	  (define-key paxedit-mode-map (kbd "C-*") 'paxedit-delete)
+	  (define-key paxedit-mode-map (kbd "C-^") 'paxedit-sexp-raise)
+	  (define-key paxedit-mode-map (kbd "M-u") 'paxedit-symbol-change-case)
+	  (define-key paxedit-mode-map (kbd "C-@") 'paxedit-symbol-copy)
+	  (define-key paxedit-mode-map (kbd "C-#") 'paxedit-symbol-kill)))
+;;; eldoc
 (require 'eldoc)
 (eldoc-add-command
   'paredit-backward-delete
   'paredit-close-round)
 
 ;; Recommendations from the nrepl README:
-
-; eldoc (shows the args to whichever function you're calling):
+;; eldoc (shows the args to whichever function you're calling):
 (add-hook 'cider-interaction-mode-hook
           'cider-turn-on-eldoc-mode)
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
@@ -85,6 +104,7 @@
 (setq cider-xrepl-display-in-current-window t)
 
 ;; Camel Casing
+;; I have mixed feelings about this
 (when t (add-hook 'cider-mode-hook 'subword-mode))
 
 ;; Use standard clojure-mode faces inside repl:
