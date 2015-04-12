@@ -17,7 +17,7 @@ source $ZSH/oh-my-zsh.sh
 export "PATH=$PATH:/usr/local/bin:$HOME/bin"
 
 export EDITOR=vim
-source /usr/local/bin/virtualenvwrapper.sh
+#source /usr/local/bin/virtualenvwrapper.sh
 
 # This is a matter of taste. Some people actually like having their
 # shells share all the history.
