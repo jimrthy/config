@@ -13,7 +13,7 @@ fi
 setxkbmap -layout dvorak
 
 # update x resources db
-xrdb -merge ~/.Xresources
+[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
 # starts screensaver daemon
 xscreensaver -no-splash &
