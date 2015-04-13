@@ -2,14 +2,10 @@
 ;; Have a :plugins vector.
 ;; Add [lein-outdated "1.0.0"] to it
 {:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}
-        :dependencies [[alembic "0.2.1"]
+        :dependencies [[alembic "0.3.2"]
                        #_[clj-ns-browser "1.3.1" :exclusions [hiccup]]
-                       [im.chit/iroh "0.1.11"]
-                       ;; TODO: figure out how to exclude plexus-utils
-                       ;; The obvious approach doesn't work
-                       ;; This is up to 0.3.4 now
-                       ;; TODO: Upgrade to that
-                       [im.chit/vinyasa "0.2.2"]  ; :exclusions [org.codehaus.plexus/plexus-utils]
+                       [im.chit/hara "2.1.11"]
+                       [im.chit/vinyasa "0.3.4"]  ; :exclusions [org.codehaus.plexus/plexus-utils]
                        [io.aviso/pretty "0.1.16"]
                        [leiningen #= (leiningen.core.main/leiningen-version)  :exclusions [cheshire
                                                                                            com.fasterxml.jackson.core/jackson-core
@@ -37,10 +33,11 @@
                      (inject/in
                       [vinyasa.inject :refer [inject [in inject-in]]]
                       #_[vinyasa.lein :exclude [*project*]]
-                      [vinyasa.pull :all]
+                      #_[vinyasa.pull :all]
+                      [alembic.still [distill pull]]
                       [cemerick.pomegranate add-classpath add-dependencies get-classpath resources]
 
-                      clojure.core [iroh.core .> .? .* .% .%>]
+                      clojure.core [vinyasa.reflection .& .> .? .* .% .%>]
                       
                       clojure.core >
                       [clojure.pprint pprint]
@@ -51,7 +48,7 @@
         ;;:local-repo "repo"
         :plugins [[com.jakemccrary/lein-test-refresh "0.7.0"]
                   [jonase/eastwood "0.2.1"]
-                  [lein-ancient "0.5.5" :exclusions [cheshire common-codec commons-codec slingshot]]
+                  [lein-ancient "0.5.5" :exclusions [cheshire common-codec commons-codec #_org.clojure/tools.reader slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
                   ;; TODO: Update!
                   #_[lein-kibit "0.0.8"]
