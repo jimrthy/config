@@ -52,6 +52,15 @@
   (when (not (package-installed-p p))
     (package-install p))))
 
+;;; Luddite mode
+(cond ((> emacs-major-version 20)
+       (tool-bar-mode -1)
+       (menu-bar-mode -1)
+       (scroll-bar-mode -1)
+       (menu-bar-showhide-fringe-menu-customize-disable)
+       (blink-cursor-mode -1)
+       (windmove-default-keybindings 'meta)))
+
 ;;;; Clojure
 
 ;;; Clojurescript files should be edited in clojure-mode
@@ -72,8 +81,8 @@
 	  (define-key paxedit-mode-map (kbd "M-<left>") 'paxedit-transpose-backward)
 	  (define-key paxedit-mode-map (kbd "M-<up>") 'paxedit-backward-up)
 	  (define-key paxedit-mode-map (kbd "M-<down>") 'paxedit-backward-end)
-	  (define-key paxedit-mode-map (kbd "M-b") 'paxedit-previous-symbol)
-	  (define-key paxedit-mode-map (kbd "M-f") 'paxedit-next-symbol)
+	  (when nil (define-key paxedit-mode-map (kbd "M-b") 'paxedit-previous-symbol)
+		(define-key paxedit-mode-map (kbd "M-f") 'paxedit-next-symbol))
 	  (define-key paxedit-mode-map (kbd "C-%") 'paxedit-copy)
 	  (define-key paxedit-mode-map (kbd "C-&") 'paxedit-kill)
 	  (define-key paxedit-mode-map (kbd "C-*") 'paxedit-delete)
