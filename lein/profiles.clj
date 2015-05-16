@@ -4,10 +4,10 @@
 {:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}
         :dependencies [[alembic "0.3.2"]
                        #_[clj-ns-browser "1.3.1" :exclusions [hiccup]]
+                       ;; We inherit this next through vinyasa.
+                       ;; Shouldn't need to declare it
                        [im.chit/hara "2.1.11"]
-                       ;; TODO: figure out how to exclude plexus-utils
-                       ;; The obvious approach doesn't work
-                       [im.chit/vinyasa "0.3.4"]  ; :exclusions [org.codehaus.plexus/plexus-utils]
+                       [im.chit/vinyasa "0.3.4" :exclusions [org.codehaus.plexus/plexus-utils]]
                        [io.aviso/pretty "0.1.16"]
                        [leiningen #= (leiningen.core.main/leiningen-version)  :exclusions [cheshire
                                                                                            com.fasterxml.jackson.core/jackson-core
@@ -25,22 +25,31 @@
                                                                                            org.jsoup/jsoup
                                                                                            potemkin]]
                        [nrepl-inspect "0.3.0"]
+                       [org.codehaus.plexus/plexus-utils "3.0"]
+                       [org.clojure/tools.namespace "0.2.10"]
                        [pjstadig/humane-test-output "0.7.0"]
                        ;; Q: Is there any point to this next one?
                        [ritz/ritz-nrepl-middleware "0.7.0"]
                        [slamhound "1.5.5"]
                        [spyscope "0.1.5"]]
-        :injections [(require '[vinyasa.inject :as inject])
-                     (require 'spyscope.core)
+        :injections [(require 'spyscope.core)
+                     (require '[vinyasa.inject :as inject])
+                     ;; TODO: call install-pretty-exception
+                     (require 'io.aviso.repl)
                      (inject/in
+                      ;; Default injection ns is .
                       [vinyasa.inject :refer [inject [in inject-in]]]
                       #_[vinyasa.lein :exclude [*project*]]
                       #_[vinyasa.pull :all]
                       [alembic.still [distill pull]]
                       [cemerick.pomegranate add-classpath add-dependencies get-classpath resources]
 
-                      clojure.core [vinyasa.reflection .& .> .? .* .% .%>]
+
+                      ;; Inject into clojure.core
+                      clojure.core
+                      [vinyasa.reflection .> .? .* .% .%> .& .>ns .>var]
                       
+                      ;; Inject into clojure.core, with prefix
                       clojure.core >
                       [clojure.pprint pprint]
                       [clojure.java.shell sh]
