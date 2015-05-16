@@ -1,3 +1,5 @@
+;;; Auto-customized pieces
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -25,7 +27,14 @@
 ;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
 ;;; There are some interesting-looking settings in there.
 
-;;; My vital packages!
+;;; This is getting complicated enough that it seems like it just
+;;; might be worth breaking into multiple modules to help with
+;;; startup time. 
+;;; Probably Better: Don't have so many instances!
+;;; How's that work with multiple clojure projects/REPLs?
+
+;;; Package Management.
+;;; TODO: Verify that we're on emacs 24
 (require 'package)
 ;; Apparently I want this if I'm going to be running
 ;; package-initialize myself
@@ -46,20 +55,37 @@
 		      magit
 		      paredit
 		      paxedit))
-
-;; Take this away for now, to try to speed up start time
-(when t (dolist (p my-packages)
+(dolist (p my-packages)
   (when (not (package-installed-p p))
-    (package-install p))))
+    (package-install p)))
 
-;;; Luddite mode
+;; Recommended for using as the editor/pager for mutt.
+;; Seems like it's probably generally useful.
+;; Or it might be a total disaster.
+;; TODO: Decide whether I like this or not
+(server-start)
+
+;;; Luddite Mode
 (cond ((> emacs-major-version 20)
-       (tool-bar-mode -1)
+       (tool-bar-mode -1)  ; intro'd in emacs 21
        (menu-bar-mode -1)
        (scroll-bar-mode -1)
        (menu-bar-showhide-fringe-menu-customize-disable)
        (blink-cursor-mode -1)
        (windmove-default-keybindings 'meta)))
+;; Toggles luddite mode
+(global-set-key [f12] '(lambda ()
+			 (interactive)
+			 (menu-bar-mode nil)
+			 (scroll-bar-mode nil)))
+(defun toggle-mode-line ()
+  "Toggles the modeline on and off"
+  (interactive)
+  (setq mode-line-format
+	(if (equal mode-line-format nil)
+	    (default-value 'mode-line-format)))
+  (redraw-display))
+(global-set-key [M-f12] 'toggle-mode-line)
 
 ;;;; Clojure
 
@@ -67,6 +93,7 @@
 (add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
 
+;;; paredit
 (autoload 'enable-paredit-mode "paredit" 
   "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
@@ -88,7 +115,7 @@
 	  (define-key paxedit-mode-map (kbd "C-*") 'paxedit-delete)
 	  (define-key paxedit-mode-map (kbd "C-^") 'paxedit-sexp-raise)
 	  (define-key paxedit-mode-map (kbd "M-u") 'paxedit-symbol-change-case)
-	  (define-key paxedit-mode-map (kbd "C-@") 'paxedit-symbol-copy)
+	  (when nil (define-key paxedit-mode-map (kbd "C-@") 'paxedit-symbol-copy))
 	  (define-key paxedit-mode-map (kbd "C-#") 'paxedit-symbol-kill)))
 ;;; eldoc
 (require 'eldoc)
@@ -127,7 +154,6 @@
 
 (setq nrepl-log-messages t)
 
-
 ;;; Org-mode customizations
 (setq org-todo-keywords
       '((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d)" "DELEGATED(g)")
@@ -136,9 +162,24 @@
 ; Mark the timestamp a task completed
 (setq org-log-done 'time)
 
-;; Magic key combinations for working inside tmux over ssh
-;; put the following line in your ~/.tmux.conf:
-;;   setw -g xterm-keys on
+;;; htmlize
+;; TODO: How do I use external CSS?
+(autoload 'htmlize-buffer "htmlize" 
+  "Convert buffer to HTML, preserving colors and decorations." t)
+
+;;; slime
+;(load (expand-file-name "~/quicklisp/slime-helper.el"))
+;(setq inferior-lisp-program "ccl")
+;(load "~/quicklisp/log4slime-setup.el")
+;(global-log4slime-mode 1)
+
+(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+
+;; Configuration customizations for running under tmux
+;; Found @ 
+;; http://unix.stackexchange.com/questions/24414/shift-arrow-not-working-in-emacs-within-tmux
+;; Seems to be needed when .tmux.conf includes
+;; setw -g xterm-keys on
 (when (getenv "TMUX")
     (progn
       (let ((x 2) (tkey ""))
@@ -166,61 +207,91 @@
 	      (setq tkey "C-M-S-"))
 
 	  ;; arrows
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d A" x)) (kbd (format "%s<up>" tkey)))
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d B" x)) (kbd (format "%s<down>" tkey)))
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d C" x)) (kbd (format "%s<right>" tkey)))
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d D" x)) (kbd (format "%s<left>" tkey)))
+	  (define-key key-translation-map 
+	    (kbd (format "M-[ 1 ; %d A" x)) (kbd (format "%s<up>" tkey)))
+	  (define-key key-translation-map 
+	    (kbd (format "M-[ 1 ; %d B" x)) (kbd (format "%s<down>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d C" x)) (kbd (format "%s<right>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d D" x)) (kbd (format "%s<left>" tkey)))
 	  ;; home
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d H" x)) (kbd (format "%s<home>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d H" x)) (kbd (format "%s<home>" tkey)))
 	  ;; end
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d F" x)) (kbd (format "%s<end>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d F" x)) (kbd (format "%s<end>" tkey)))
 	  ;; page up
-	  (define-key key-translation-map (kbd (format "M-[ 5 ; %d ~" x)) (kbd (format "%s<prior>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 5 ; %d ~" x)) (kbd (format "%s<prior>" tkey)))
 	  ;; page down
-	  (define-key key-translation-map (kbd (format "M-[ 6 ; %d ~" x)) (kbd (format "%s<next>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 6 ; %d ~" x)) (kbd (format "%s<next>" tkey)))
 	  ;; insert
-	  (define-key key-translation-map (kbd (format "M-[ 2 ; %d ~" x)) (kbd (format "%s<delete>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 2 ; %d ~" x)) (kbd (format "%s<delete>" tkey)))
 	  ;; delete
-	  (define-key key-translation-map (kbd (format "M-[ 3 ; %d ~" x)) (kbd (format "%s<delete>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 3 ; %d ~" x)) (kbd (format "%s<delete>" tkey)))
 	  ;; f1
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d P" x)) (kbd (format "%s<f1>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d P" x)) (kbd (format "%s<f1>" tkey)))
 	  ;; f2
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d Q" x)) (kbd (format "%s<f2>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d Q" x)) (kbd (format "%s<f2>" tkey)))
 	  ;; f3
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d R" x)) (kbd (format "%s<f3>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d R" x)) (kbd (format "%s<f3>" tkey)))
 	  ;; f4
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d S" x)) (kbd (format "%s<f4>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d S" x)) (kbd (format "%s<f4>" tkey)))
 	  ;; f5
-	  (define-key key-translation-map (kbd (format "M-[ 15 ; %d ~" x)) (kbd (format "%s<f5>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 15 ; %d ~" x)) (kbd (format "%s<f5>" tkey)))
 	  ;; f6
-	  (define-key key-translation-map (kbd (format "M-[ 17 ; %d ~" x)) (kbd (format "%s<f6>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 17 ; %d ~" x)) (kbd (format "%s<f6>" tkey)))
 	  ;; f7
-	  (define-key key-translation-map (kbd (format "M-[ 18 ; %d ~" x)) (kbd (format "%s<f7>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 18 ; %d ~" x)) (kbd (format "%s<f7>" tkey)))
 	  ;; f8
-	  (define-key key-translation-map (kbd (format "M-[ 19 ; %d ~" x)) (kbd (format "%s<f8>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 19 ; %d ~" x)) (kbd (format "%s<f8>" tkey)))
 	  ;; f9
-	  (define-key key-translation-map (kbd (format "M-[ 20 ; %d ~" x)) (kbd (format "%s<f9>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 20 ; %d ~" x)) (kbd (format "%s<f9>" tkey)))
 	  ;; f10
-	  (define-key key-translation-map (kbd (format "M-[ 21 ; %d ~" x)) (kbd (format "%s<f10>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 21 ; %d ~" x)) (kbd (format "%s<f10>" tkey)))
 	  ;; f11
-	  (define-key key-translation-map (kbd (format "M-[ 23 ; %d ~" x)) (kbd (format "%s<f11>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 23 ; %d ~" x)) (kbd (format "%s<f11>" tkey)))
 	  ;; f12
-	  (define-key key-translation-map (kbd (format "M-[ 24 ; %d ~" x)) (kbd (format "%s<f12>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 24 ; %d ~" x)) (kbd (format "%s<f12>" tkey)))
 	  ;; f13
-	  (define-key key-translation-map (kbd (format "M-[ 25 ; %d ~" x)) (kbd (format "%s<f13>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 25 ; %d ~" x)) (kbd (format "%s<f13>" tkey)))
 	  ;; f14
-	  (define-key key-translation-map (kbd (format "M-[ 26 ; %d ~" x)) (kbd (format "%s<f14>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 26 ; %d ~" x)) (kbd (format "%s<f14>" tkey)))
 	  ;; f15
-	  (define-key key-translation-map (kbd (format "M-[ 28 ; %d ~" x)) (kbd (format "%s<f15>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 28 ; %d ~" x)) (kbd (format "%s<f15>" tkey)))
 	  ;; f16
-	  (define-key key-translation-map (kbd (format "M-[ 29 ; %d ~" x)) (kbd (format "%s<f16>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 29 ; %d ~" x)) (kbd (format "%s<f16>" tkey)))
 	  ;; f17
-	  (define-key key-translation-map (kbd (format "M-[ 31 ; %d ~" x)) (kbd (format "%s<f17>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 31 ; %d ~" x)) (kbd (format "%s<f17>" tkey)))
 	  ;; f18
-	  (define-key key-translation-map (kbd (format "M-[ 32 ; %d ~" x)) (kbd (format "%s<f18>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 32 ; %d ~" x)) (kbd (format "%s<f18>" tkey)))
 	  ;; f19
-	  (define-key key-translation-map (kbd (format "M-[ 33 ; %d ~" x)) (kbd (format "%s<f19>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 33 ; %d ~" x)) (kbd (format "%s<f19>" tkey)))
 	  ;; f20
-	  (define-key key-translation-map (kbd (format "M-[ 34 ; %d ~" x)) (kbd (format "%s<f20>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 34 ; %d ~" x)) (kbd (format "%s<f20>" tkey)))
 
 	  (setq x (+ x 1))))))

@@ -4,7 +4,7 @@
 {:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}
         :dependencies [[alembic "0.2.1"]
                        #_[clj-ns-browser "1.3.1" :exclusions [hiccup]]
-                       [im.chit/iroh "0.1.11"]
+                       #_[im.chit/iroh "0.1.11"]
                        ;; TODO: figure out how to exclude plexus-utils
                        ;; The obvious approach doesn't work
                        [im.chit/vinyasa "0.3.4"]  ; :exclusions [org.codehaus.plexus/plexus-utils]
@@ -55,8 +55,8 @@
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
         :plugins [[com.jakemccrary/lein-test-refresh "0.7.0"]
-                  [jonase/eastwood "0.2.1"]
-                  [lein-ancient "0.5.5" :exclusions [cheshire common-codec commons-codec slingshot]]
+                  [jonase/eastwood "0.2.1" :exclusions [org.clojure/clojure]]
+                  [lein-ancient "0.6.7" :exclusions [cheshire common-codec commons-codec slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
                   ;; TODO: Update!
                   #_[lein-kibit "0.0.8"]
@@ -68,7 +68,6 @@
                         ;;ritz.nrepl.middleware.javadoc/wrap-javadoc
                         ;;ritz.nrepl.middleware.simple-complete/wrap-simple-complete
                         ]}
-        :signing {:gpg-key "69327CA8"}
         :whidbey {:width 180
                   :map-delimiter ""
                   :extend-notation true
