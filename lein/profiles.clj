@@ -6,7 +6,13 @@
                        #_[clj-ns-browser "1.3.1" :exclusions [hiccup]]
                        ;; We inherit this next through vinyasa.
                        ;; Shouldn't need to declare it
-                       [im.chit/hara "2.1.11"]
+                       ;; Actually, this doesn't make sense in here. It's entire purpose
+                       ;; is life is to split away from vinyasa. It's a general purpose
+                       ;; library, such as useful.
+                       ;; TODO: Verify that nothing else in here depends on it.
+                       ;; (I'm pretty sure it doesn't, because my general profiles.clj
+                       ;; doesn't have this)
+                       #_[im.chit/hara "2.1.11"]
                        [im.chit/vinyasa "0.3.4" :exclusions [org.codehaus.plexus/plexus-utils]]
                        [io.aviso/pretty "0.1.16"]
                        [leiningen #= (leiningen.core.main/leiningen-version)  :exclusions [cheshire
@@ -57,7 +63,7 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[com.jakemccrary/lein-test-refresh "0.7.0"]
+        :plugins [[com.jakemccrary/lein-test-refresh "0.9.0"]
                   [jonase/eastwood "0.2.1" :exclusions [org.clojure/clojure]]
                   [lein-ancient "0.6.7" :exclusions [cheshire common-codec commons-codec slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
