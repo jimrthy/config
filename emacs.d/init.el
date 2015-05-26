@@ -45,12 +45,12 @@
 		      clojure-mode
 		      magit
 		      paredit
-		      paxedit))
+		      paxedit
+		      web-mode))
 
-;; Take this away for now, to try to speed up start time
-(when t (dolist (p my-packages)
+(dolist (p my-packages)
   (when (not (package-installed-p p))
-    (package-install p))))
+    (package-install p)))
 
 ;;;; Clojure
 
@@ -58,7 +58,7 @@
 (add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
 
-(autoload 'enable-paredit-mode "paredit" 
+(autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'clojure-mode-hook 'paredit-mode)
@@ -126,6 +126,32 @@
 	(sequence "|" "CANCELLED(c)" "DEFERRED(r)")))
 ; Mark the timestamp a task completed
 (setq org-log-done 'time)
+
+;;; Web Mode
+;;; (the super-primitive/I-haven't-watched-intro-video version)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+;; Keep around for copy/pasting future file extensions
+(when nil (add-to-list 'auto-mode-alist '("\\.\\'" . web-mode)))
+
+;;; Some conveniences
+(setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+(setq default-buffer-file-coding-sstem 'utf-8-unix)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;;; Luddite Mode
+(tool-bar-mode)
+(scroll-bar-mode)
+(menu-bar-mode)
+
 
 ;; Magic key combinations for working inside tmux over ssh
 ;; put the following line in your ~/.tmux.conf:
