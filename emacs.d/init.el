@@ -93,6 +93,7 @@
 ;;; Clojurescript files should be edited in clojure-mode
 (add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
 
 ;;; paredit
 (autoload 'enable-paredit-mode "paredit"
@@ -197,6 +198,14 @@
 ;(global-log4slime-mode 1)
 
 (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+
+;;; Markdown Mode
+;; Q: Do I need this?
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; Magic key combinations for working inside tmux over ssh
 ;; put the following line in your ~/.tmux.conf:
