@@ -220,6 +220,8 @@
 ;; http://unix.stackexchange.com/questions/24414/shift-arrow-not-working-in-emacs-within-tmux
 ;; Seems to be needed when .tmux.conf includes
 ;; setw -g xterm-keys on
+;; N.B. to get a hint about which key sequence your terminal
+;; is sending, use C-q <chord>
 (when (getenv "TMUX")
     (progn
       (let ((x 2) (tkey ""))
