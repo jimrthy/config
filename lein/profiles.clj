@@ -33,6 +33,7 @@
                        [nrepl-inspect "0.3.0"]
                        [org.codehaus.plexus/plexus-utils "3.0"]
                        [org.clojure/tools.namespace "0.2.10"]
+                       [org.clojure/tools.nrepl "0.2.10" :exclusions [org.clojure/clojure]]
                        [pjstadig/humane-test-output "0.7.0"]
                        ;; Q: Is there any point to this next one?
                        [ritz/ritz-nrepl-middleware "0.7.0"]
@@ -54,7 +55,7 @@
                       ;; Inject into clojure.core
                       clojure.core
                       [vinyasa.reflection .> .? .* .% .%> .& .>ns .>var]
-                      
+
                       ;; Inject into clojure.core, with prefix
                       clojure.core >
                       [clojure.pprint pprint]
