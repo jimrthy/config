@@ -25,8 +25,6 @@ cp jimrthy.zsh-theme ~/.oh-my-zsh/themes
 cp ~/.zshrc ~/zshrc.original
 cp zshrc ~/.zshrc 
 
-cp open-wide.pem ~/.ssh
-cp ssh.config ~/.ssh/config
 cp tmux.conf ~/.tmux.conf 
 cp vimrc ~/.vimrc 
 

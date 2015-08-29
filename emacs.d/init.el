@@ -29,7 +29,7 @@
 
 ;;; This is getting complicated enough that it seems like it just
 ;;; might be worth breaking into multiple modules to help with
-;;; startup time. 
+;;; startup time.
 ;;; Probably Better: Don't have so many instances!
 ;;; How's that work with multiple clojure projects/REPLs?
 
@@ -98,8 +98,10 @@
 ;;; paredit
 (autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'clojure-mode-hook 'paredit-mode)
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'scheme-mode-hook (lambda () (paredit-mode +0)))
 
 ;;; Probationary paxedit configuration
 (require 'paxedit)
@@ -177,7 +179,11 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 ;; Keep around for copy/pasting future file extensions
 (when nil (add-to-list 'auto-mode-alist '("\\.\\'" . web-mode)))
-
+;; No idea what this might be for
+;; TODO: Actually read the basics on web-mode.org
+(setq web-mode-engines-alist
+      '(("php"   . "\\.phtml\\'")
+        ("blade" . "\\.blade\\.")))
 ;;; Some conveniences
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)
@@ -186,7 +192,7 @@
 
 ;;; htmlize
 ;; TODO: How do I use external CSS?
-(autoload 'htmlize-buffer "htmlize" 
+(autoload 'htmlize-buffer "htmlize"
   "Convert buffer to HTML, preserving colors and decorations." t)
 
 ;;; slime
@@ -210,10 +216,12 @@
 ;;   setw -g xterm-keys on
 
 ;; Configuration customizations for running under tmux
-;; Found @ 
+;; Found @
 ;; http://unix.stackexchange.com/questions/24414/shift-arrow-not-working-in-emacs-within-tmux
 ;; Seems to be needed when .tmux.conf includes
 ;; setw -g xterm-keys on
+;; N.B. to get a hint about which key sequence your terminal
+;; is sending, use C-q <chord>
 (when (getenv "TMUX")
     (progn
       (let ((x 2) (tkey ""))
@@ -241,9 +249,9 @@
 	      (setq tkey "C-M-S-"))
 
 	  ;; arrows
-	  (define-key key-translation-map 
+	  (define-key key-translation-map
 	    (kbd (format "M-[ 1 ; %d A" x)) (kbd (format "%s<up>" tkey)))
-	  (define-key key-translation-map 
+	  (define-key key-translation-map
 	    (kbd (format "M-[ 1 ; %d B" x)) (kbd (format "%s<down>" tkey)))
 	  (define-key key-translation-map
 	    (kbd (format "M-[ 1 ; %d C" x)) (kbd (format "%s<right>" tkey)))
