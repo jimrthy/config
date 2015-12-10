@@ -65,7 +65,7 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[cider/cider-nrepl "0.9.1" :exclusions [org.clojure/java.classpath]]
+        :plugins [[cider/cider-nrepl "0.10.0" :exclusions [org.clojure/java.classpath]]
                   [com.jakemccrary/lein-test-refresh "0.9.0"]
                   [jonase/eastwood "0.2.1" :exclusions [org.clojure/clojure]]
                   [lein-ancient "0.6.7" :exclusions [cheshire common-codec commons-codec slingshot]]

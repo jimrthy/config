@@ -4,4 +4,4 @@
 [color]
         ui = true
 [core]
-	excludesfile = /home/bp/.gitignore_global
+	excludesfile = /home/james/.gitignore_global
