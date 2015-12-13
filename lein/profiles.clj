@@ -32,6 +32,7 @@
                                                                                            potemkin]]
                        [nrepl-inspect "0.3.0"]
                        [org.codehaus.plexus/plexus-utils "3.0"]
+                       [org.clojure/java.classpath "0.2.2"]
                        [org.clojure/tools.namespace "0.2.10"]
                        [org.clojure/tools.nrepl "0.2.10" :exclusions [org.clojure/clojure]]
                        [pjstadig/humane-test-output "0.7.0"]
@@ -64,8 +65,9 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[com.jakemccrary/lein-test-refresh "0.9.0"]
-                  [jonase/eastwood "0.2.1" :exclusions [org.clojure/clojure]]
+        :plugins [[cider/cider-nrepl "0.10.0" :exclusions [org.clojure/java.classpath]]
+                  [com.jakemccrary/lein-test-refresh "0.9.0"]
+                  [jonase/eastwood "0.2.2" :exclusions [org.clojure/clojure]]
                   [lein-ancient "0.6.7" :exclusions [cheshire common-codec commons-codec slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
                   ;; TODO: Update!
@@ -83,5 +85,4 @@
                   :extend-notation true
                   :print-meta true
                   :color-scheme {}
-                  :print-color true}}
- :repl {:plugins [[cider/cider-nrepl "0.8.2" :exclusions [org.clojure/java.classpath]]]}}
+                  :print-color true}}}
