@@ -14,7 +14,7 @@
                        ;; doesn't have this)
                        #_[im.chit/hara "2.1.11"]
                        [im.chit/vinyasa "0.3.4" :exclusions [org.codehaus.plexus/plexus-utils]]
-                       [io.aviso/pretty "0.1.16"]
+                       [io.aviso/pretty "0.1.20"]
                        [leiningen #= (leiningen.core.main/leiningen-version)  :exclusions [cheshire
                                                                                            com.fasterxml.jackson.core/jackson-core
                                                                                            com.fasterxml.jackson.dataformat/jackson-dataformat-smile
