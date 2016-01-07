@@ -68,7 +68,7 @@
         :plugins [[cider/cider-nrepl "0.10.0" :exclusions [org.clojure/java.classpath]]
                   [com.jakemccrary/lein-test-refresh "0.9.0"]
                   [jonase/eastwood "0.2.2" :exclusions [org.clojure/clojure]]
-                  [lein-ancient "0.6.7" :exclusions [cheshire common-codec commons-codec slingshot]]
+                  [lein-ancient "0.6.8" :exclusions [cheshire common-codec commons-codec org.clojure/clojure org.clojure/tools.reader slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
                   ;; TODO: Update!
                   #_[lein-kibit "0.0.8"]
