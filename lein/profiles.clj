@@ -34,7 +34,7 @@
                        [org.codehaus.plexus/plexus-utils "3.0"]
                        [org.clojure/java.classpath "0.2.2"]
                        [org.clojure/tools.namespace "0.2.10"]
-                       [org.clojure/tools.nrepl "0.2.10" :exclusions [org.clojure/clojure]]
+                       [org.clojure/tools.nrepl "0.2.12" :exclusions [org.clojure/clojure]]
                        [pjstadig/humane-test-output "0.7.0"]
                        ;; Q: Is there any point to this next one?
                        [ritz/ritz-nrepl-middleware "0.7.0"]
