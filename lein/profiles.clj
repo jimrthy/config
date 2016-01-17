@@ -39,7 +39,7 @@
                        ;; Q: Is there any point to this next one?
                        [ritz/ritz-nrepl-middleware "0.7.0"]
                        [slamhound "1.5.5"]
-                       [spyscope "0.1.5"]]
+                       [spyscope "0.1.5" :exclusions [clj-time]]]
         :injections [(require 'spyscope.core)
                      (require '[vinyasa.inject :as inject])
                      ;; TODO: call install-pretty-exception
