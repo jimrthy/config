@@ -5,3 +5,5 @@
         ui = true
 [core]
 	excludesfile = /home/james/.gitignore_global
+[push]
+	default = simple

@@ -14,7 +14,7 @@
                        ;; doesn't have this)
                        #_[im.chit/hara "2.1.11"]
                        [im.chit/vinyasa "0.3.4" :exclusions [org.codehaus.plexus/plexus-utils]]
-                       [io.aviso/pretty "0.1.16"]
+                       [io.aviso/pretty "0.1.20"]
                        [leiningen #= (leiningen.core.main/leiningen-version)  :exclusions [cheshire
                                                                                            com.fasterxml.jackson.core/jackson-core
                                                                                            com.fasterxml.jackson.dataformat/jackson-dataformat-smile
@@ -34,12 +34,12 @@
                        [org.codehaus.plexus/plexus-utils "3.0"]
                        [org.clojure/java.classpath "0.2.2"]
                        [org.clojure/tools.namespace "0.2.10"]
-                       [org.clojure/tools.nrepl "0.2.10" :exclusions [org.clojure/clojure]]
+                       [org.clojure/tools.nrepl "0.2.12" :exclusions [org.clojure/clojure]]
                        [pjstadig/humane-test-output "0.7.0"]
                        ;; Q: Is there any point to this next one?
                        [ritz/ritz-nrepl-middleware "0.7.0"]
                        [slamhound "1.5.5"]
-                       [spyscope "0.1.5"]]
+                       [spyscope "0.1.5" :exclusions [clj-time]]]
         :injections [(require 'spyscope.core)
                      (require '[vinyasa.inject :as inject])
                      ;; TODO: call install-pretty-exception
@@ -65,10 +65,10 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[cider/cider-nrepl "0.10.0" :exclusions [org.clojure/java.classpath]]
+        :plugins [[cider/cider-nrepl "0.10.1" :exclusions [org.clojure/java.classpath]]
                   [com.jakemccrary/lein-test-refresh "0.9.0"]
                   [jonase/eastwood "0.2.2" :exclusions [org.clojure/clojure]]
-                  [lein-ancient "0.6.7" :exclusions [cheshire common-codec commons-codec slingshot]]
+                  [lein-ancient "0.6.8" :exclusions [cheshire common-codec commons-codec org.clojure/clojure org.clojure/tools.reader slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
                   ;; TODO: Update!
                   #_[lein-kibit "0.0.8"]
