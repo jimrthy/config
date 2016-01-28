@@ -1,18 +1,22 @@
 ;; TODO:
 ;; Have a :plugins vector.
 ;; Add [lein-outdated "1.0.0"] to it
-{:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}
-        :dependencies [[alembic "0.3.2"]
+;; Q: Does that make any sense at all?
+;; Hasn't it been superseded by lein-ancient?
+{:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}  ; Q: Will I ever find occasion to actually use this?
+        :dependencies [[alembic "0.3.2"]   ; Q: what's this for?
                        #_[clj-ns-browser "1.3.1" :exclusions [hiccup]]
                        ;; We inherit this next through vinyasa.
                        ;; Shouldn't need to declare it
-                       ;; Actually, this doesn't make sense in here. It's entire purpose
-                       ;; is life is to split away from vinyasa. It's a general purpose
+                       ;; Actually, this doesn't make sense in here. Its entire purpose
+                       ;; in life is to split away from vinyasa. It's a general purpose
                        ;; library, such as useful.
                        ;; TODO: Verify that nothing else in here depends on it.
+                       ;; (that seems to be done)
                        ;; (I'm pretty sure it doesn't, because my general profiles.clj
                        ;; doesn't have this)
                        #_[im.chit/hara "2.1.11"]
+                       ;; TODO: Replace this with whatever replaced it
                        [im.chit/vinyasa "0.3.4" :exclusions [org.codehaus.plexus/plexus-utils]]
                        [io.aviso/pretty "0.1.20"]
                        [leiningen #= (leiningen.core.main/leiningen-version)  :exclusions [cheshire
@@ -30,10 +34,12 @@
                                                                                            ;;org.codehaus.plexus/plexus-utils
                                                                                            org.jsoup/jsoup
                                                                                            potemkin]]
+                       ;; How many of any of the rest of these do I actually use?
                        [nrepl-inspect "0.3.0"]
                        [org.codehaus.plexus/plexus-utils "3.0"]
                        [org.clojure/java.classpath "0.2.2"]
                        [org.clojure/tools.namespace "0.2.10"]
+                       ;; I know I have a lot of projects that transitively rely on this, but they really shouldn't
                        [org.clojure/tools.nrepl "0.2.12" :exclusions [org.clojure/clojure]]
                        [pjstadig/humane-test-output "0.7.0"]
                        ;; Q: Is there any point to this next one?
@@ -49,10 +55,12 @@
                       [vinyasa.inject :refer [inject [in inject-in]]]
                       #_[vinyasa.lein :exclude [*project*]]
                       #_[vinyasa.pull :all]
-                      [alembic.still [distill pull]]
+                      [alembic.still [distill pull]]  ; Q: what is/was this?
+                      ;; Actually, I think I want to keep something along these lines
                       [cemerick.pomegranate add-classpath add-dependencies get-classpath resources]
 
 
+                      ;;; At least 90% certain that I don't want any of the rest of this
                       ;; Inject into clojure.core
                       clojure.core
                       [vinyasa.reflection .> .? .* .% .%> .& .>ns .>var]
@@ -60,8 +68,10 @@
                       ;; Inject into clojure.core, with prefix
                       clojure.core >
                       [clojure.pprint pprint]
-                      [clojure.java.shell sh]
-                      #_[clj-ns-browser.sdoc sdoc])
+                      [clojure.java.shell sh])
+                     ;;; Well, this doesn't seem awful; I think I do want something like this.
+                     ;;; But it doesn't seem worth including here...really ought to be decided on
+                     ;;; a case-by-case basis, oughtn't it?
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
