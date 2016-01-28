@@ -34,8 +34,12 @@
 ;;; How's that work with multiple clojure projects/REPLs?
 
 ;;; Package Management.
-;;; TODO: Verify that we're on emacs 24
-(require 'package)
+(if (> emacs-major-version 23)
+    (require 'package)
+  ;; Q: How do I produce a warning?
+  ;; At the very least, magit won't work
+  );;; TODO: Verify that we're on emacs 24
+
 ;; Apparently I want this if I'm going to be running
 ;; package-initialize myself
 (setq package-enable-at-startup nil)
@@ -54,17 +58,10 @@
 		      clojure-mode
 		      magit
 		      paredit
-		      paxedit
 		      web-mode))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
-
-;; Recommended for using as the editor/pager for mutt.
-;; Seems like it's probably generally useful.
-;; Or it might be a total disaster.
-;; TODO: Decide whether I like this or not
-(server-start)
 
 ;;; Luddite Mode
 (cond ((> emacs-major-version 20)
@@ -93,6 +90,7 @@
 ;;; Clojurescript files should be edited in clojure-mode
 (add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.cljc$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
 
 ;;; paredit
@@ -103,24 +101,6 @@
 (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'scheme-mode-hook (lambda () (paredit-mode +0)))
 
-;;; Probationary paxedit configuration
-(require 'paxedit)
-(add-hook 'emacs-lisp-mode-hook 'paxedit-mode)
-(add-hook 'clojure-mode-hook 'paxedit-mode)
-(eval-after-load "paxedit"
-  '(progn (define-key paxedit-mode-map (kbd "M-<right>") 'paxedit-transpose-forward)
-	  (define-key paxedit-mode-map (kbd "M-<left>") 'paxedit-transpose-backward)
-	  (define-key paxedit-mode-map (kbd "M-<up>") 'paxedit-backward-up)
-	  (define-key paxedit-mode-map (kbd "M-<down>") 'paxedit-backward-end)
-	  (when nil (define-key paxedit-mode-map (kbd "M-b") 'paxedit-previous-symbol)
-		(define-key paxedit-mode-map (kbd "M-f") 'paxedit-next-symbol))
-	  (define-key paxedit-mode-map (kbd "C-%") 'paxedit-copy)
-	  (define-key paxedit-mode-map (kbd "C-&") 'paxedit-kill)
-	  (define-key paxedit-mode-map (kbd "C-*") 'paxedit-delete)
-	  (define-key paxedit-mode-map (kbd "C-^") 'paxedit-sexp-raise)
-	  (define-key paxedit-mode-map (kbd "M-u") 'paxedit-symbol-change-case)
-	  (when nil (define-key paxedit-mode-map (kbd "C-@") 'paxedit-symbol-copy))
-	  (define-key paxedit-mode-map (kbd "C-#") 'paxedit-symbol-kill)))
 ;;; eldoc
 (require 'eldoc)
 (eldoc-add-command
@@ -144,8 +124,7 @@
 (setq cider-xrepl-display-in-current-window t)
 
 ;; Camel Casing
-;; I have mixed feelings about this
-(when t (add-hook 'cider-mode-hook 'subword-mode))
+(add-hook 'cider-mode-hook 'subword-mode)
 
 ;; Use standard clojure-mode faces inside repl:
 (setq cider-repl-use-clojure-font-lock t)
@@ -165,6 +144,16 @@
 	(sequence "|" "CANCELLED(c)" "DEFERRED(r)")))
 ; Mark the timestamp a task completed
 (setq org-log-done 'time)
+
+;; capture
+(setq org-default-notes-file "~/projects/todo/notes.org")
+(define-key global-map "\C-cn" 'org-capture)
+
+;; Allow clojure code blocks in org mode
+(require 'org)
+(require 'ob-clojure)
+(setq org-babel-clojure-backend 'cider)
+(require 'cider)
 
 ;;; Web Mode
 ;;; (the super-primitive/I-haven't-watched-intro-video version)
@@ -202,6 +191,26 @@
 ;(global-log4slime-mode 1)
 
 (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+
+;;; Ruby On Rails
+
+;; Rake files are ruby too, as are gemspecs, rackup files, and gemfiles
+(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
+
+;; Never want to edit bytecode
+(add-to-list 'completion-ignored-extensions ".rbc")
+(add-to-list 'completion-ignored-extensions ".pyc")
+
+;; HAML...although the haml mode seems broken
+(add-hook 'haml-mode-hook
+	  (lambda ()
+	    (setq indent-tabs-mode nil)
+	    (define-key haml-mode-map "\C-m" 'newline-and-indent)))
 
 ;;; Markdown Mode
 ;; Q: Do I need this?
