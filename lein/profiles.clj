@@ -1,11 +1,8 @@
 ;; TODO:
 ;; Have a :plugins vector.
 ;; Add [lein-outdated "1.0.0"] to it
-;; Q: Does that make any sense at all?
-;; Hasn't it been superseded by lein-ancient?
 {:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}  ; Q: Will I ever find occasion to actually use this?
-        :dependencies [[alembic "0.3.2"]   ; Q: what's this for?
-                       #_[clj-ns-browser "1.3.1" :exclusions [hiccup]]
+        :dependencies [[alembic "0.3.2"]   ; Q: what's this really for?
                        ;; We inherit this next through vinyasa.
                        ;; Shouldn't need to declare it
                        ;; Actually, this doesn't make sense in here. Its entire purpose
@@ -16,7 +13,8 @@
                        ;; (I'm pretty sure it doesn't, because my general profiles.clj
                        ;; doesn't have this)
                        #_[im.chit/hara "2.1.11"]
-                       ;; TODO: Replace this with whatever replaced it
+                       ;; This should probably go away
+                       ;; Q: Did hara replace this too?
                        [im.chit/vinyasa "0.3.4" :exclusions [org.codehaus.plexus/plexus-utils]]
                        [io.aviso/pretty "0.1.20"]
                        [leiningen #= (leiningen.core.main/leiningen-version)  :exclusions [cheshire
@@ -31,23 +29,19 @@
                                                                                            org.apache.maven.wagon/wagon-provider-api
                                                                                            org.clojure/tools.cli
                                                                                            org.clojure/tools.reader
-                                                                                           ;;org.codehaus.plexus/plexus-utils
                                                                                            org.jsoup/jsoup
                                                                                            potemkin]]
                        ;; How many of any of the rest of these do I actually use?
                        [nrepl-inspect "0.3.0"]
-                       [org.codehaus.plexus/plexus-utils "3.0"]
-                       [org.clojure/java.classpath "0.2.2"]
+                       [org.codehaus.plexus/plexus-utils "3.0.17"]
                        [org.clojure/tools.namespace "0.2.10"]
                        ;; I know I have a lot of projects that transitively rely on this, but they really shouldn't
                        [org.clojure/tools.nrepl "0.2.12" :exclusions [org.clojure/clojure]]
                        [pjstadig/humane-test-output "0.7.0"]
                        ;; Q: Is there any point to this next one?
                        [ritz/ritz-nrepl-middleware "0.7.0"]
-                       [slamhound "1.5.5"]
-                       [spyscope "0.1.5" :exclusions [clj-time]]]
-        :injections [(require 'spyscope.core)
-                     (require '[vinyasa.inject :as inject])
+                       [slamhound "1.5.5"]]
+        :injections [(require '[vinyasa.inject :as inject])
                      ;; TODO: call install-pretty-exception
                      (require 'io.aviso.repl)
                      (inject/in
@@ -75,13 +69,18 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[cider/cider-nrepl "0.10.1" :exclusions [org.clojure/java.classpath]]
-                  [com.jakemccrary/lein-test-refresh "0.9.0"]
+        :plugins [[cider/cider-nrepl "0.10.2" :exclusions [org.clojure/java.classpath]]
+                  [com.jakemccrary/lein-test-refresh "0.13.0"]
                   [jonase/eastwood "0.2.2" :exclusions [org.clojure/clojure]]
-                  [lein-ancient "0.6.8" :exclusions [cheshire common-codec commons-codec org.clojure/clojure org.clojure/tools.reader slingshot]]
+                  [lein-ancient "0.6.8" :exclusions [cheshire
+                                                     common-codec
+                                                     commons-codec
+                                                     org.clojure/clojure
+                                                     org.clojure/tools.reader
+                                                     slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
                   ;; TODO: Update!
-                  #_[lein-kibit "0.0.8"]
+                  [lein-kibit "0.1.2"]
                   [lein-pprint "1.1.1"]
                   [mvxcvi/whidbey "0.6.0"]]
         :repl-options {:nrepl-middleware
@@ -95,4 +94,5 @@
                   :extend-notation true
                   :print-meta true
                   :color-scheme {}
-                  :print-color true}}}
+                  :print-color true}}
+  :repl {:plugins [[cider/cider-nrepl "0.10.1" :exclusions [org.clojure/java.classpath]]]}}
