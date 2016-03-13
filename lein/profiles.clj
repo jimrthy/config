@@ -90,11 +90,7 @@
                   [lein-pprint "1.1.1"]
                   [mvxcvi/whidbey "1.3.0" :exclusions [org.clojure/clojure]]]
         :repl-options {:nrepl-middleware
-                       [inspector.middleware/wrap-inspect
-                        ;;ritz.nrepl.middleware.apropos/wrap-apropos
-                        ;;ritz.nrepl.middleware.javadoc/wrap-javadoc
-                        ;;ritz.nrepl.middleware.simple-complete/wrap-simple-complete
-                        ]}
+                       []}
         :whidbey {:width 180
                   :map-delimiter ""
                   :extend-notation true
