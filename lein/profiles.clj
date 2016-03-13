@@ -2,7 +2,7 @@
 ;; Have a :plugins vector.
 ;; Add [lein-outdated "1.0.0"] to it
 {:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}  ; Q: Will I ever find occasion to actually use this?
-        :dependencies [[alembic "0.3.2"]   ; Q: what's this really for?
+        :dependencies [[alembic "0.3.2"]   ; Q: what's this really for? A: modifying CLASSPATH at runtime
                        ;; We inherit this next through vinyasa.
                        ;; Shouldn't need to declare it
                        ;; Actually, this doesn't make sense in here. Its entire purpose
@@ -16,7 +16,7 @@
                        ;; This should probably go away
                        ;; Q: Did hara replace this too?
                        [im.chit/vinyasa "0.3.4" :exclusions [org.codehaus.plexus/plexus-utils]]
-                       [io.aviso/pretty "0.1.20"]
+                       [io.aviso/pretty "0.1.24"]
                        [leiningen #= (leiningen.core.main/leiningen-version)  :exclusions [cheshire
                                                                                            com.fasterxml.jackson.core/jackson-core
                                                                                            com.fasterxml.jackson.dataformat/jackson-dataformat-smile
@@ -31,16 +31,20 @@
                                                                                            org.clojure/tools.reader
                                                                                            org.jsoup/jsoup
                                                                                            potemkin]]
-                       ;; How many of any of the rest of these do I actually use?
-                       [nrepl-inspect "0.3.0"]
+                       ;; Q: How many of any of the rest of these do I actually use?
+                       ;; This one's gone
+                       #_[nrepl-inspect "0.3.0"]
                        [org.codehaus.plexus/plexus-utils "3.0.17"]
-                       [org.clojure/tools.namespace "0.2.10"]
+                       ;; I use this everywhere. But it doesn't belong in here
+                       #_[org.clojure/tools.namespace "0.2.10"]
                        ;; I know I have a lot of projects that transitively rely on this, but they really shouldn't
-                       [org.clojure/tools.nrepl "0.2.12" :exclusions [org.clojure/clojure]]
+                       #_[org.clojure/tools.nrepl "0.2.12" :exclusions [org.clojure/clojure]]
                        [pjstadig/humane-test-output "0.7.0"]
                        ;; Q: Is there any point to this next one?
-                       [ritz/ritz-nrepl-middleware "0.7.0"]
-                       [slamhound "1.5.5"]]
+                       #_[ritz/ritz-nrepl-middleware "0.7.0"]
+                       ;; This approach is long deprecated.
+                       ;; See its README and put it into :aliases insted
+                       #_[slamhound "1.5.5"]]
         :injections [(require '[vinyasa.inject :as inject])
                      ;; TODO: call install-pretty-exception
                      (require 'io.aviso.repl)
@@ -69,8 +73,8 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[cider/cider-nrepl "0.10.2" :exclusions [org.clojure/java.classpath]]
-                  [com.jakemccrary/lein-test-refresh "0.13.0"]
+        :plugins [[cider/cider-nrepl "0.11.0" :exclusions [org.clojure/java.classpath]]
+                  [com.jakemccrary/lein-test-refresh "0.14.0"]
                   [jonase/eastwood "0.2.2" :exclusions [org.clojure/clojure]]
                   [lein-ancient "0.6.8" :exclusions [cheshire
                                                      common-codec
@@ -82,7 +86,7 @@
                   ;; TODO: Update!
                   [lein-kibit "0.1.2"]
                   [lein-pprint "1.1.1"]
-                  [mvxcvi/whidbey "0.6.0"]]
+                  [mvxcvi/whidbey "1.3.0"]]
         :repl-options {:nrepl-middleware
                        [inspector.middleware/wrap-inspect
                         ;;ritz.nrepl.middleware.apropos/wrap-apropos

@@ -58,6 +58,7 @@
 		      clojure-mode
 		      magit
 		      paredit
+                      slamhound
 		      web-mode))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
