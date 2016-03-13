@@ -27,10 +27,12 @@
                                                                                            org.apache.maven.wagon/wagon-http
                                                                                            org.apache.maven.wagon/wagon-http-shared4
                                                                                            org.apache.maven.wagon/wagon-provider-api
+                                                                                           org.clojure/clojure
                                                                                            org.clojure/tools.cli
-                                                                                           org.clojure/tools.reader
+                                                                                           #_org.clojure/tools.reader
                                                                                            org.jsoup/jsoup
-                                                                                           potemkin]]
+                                                                                           potemkin
+                                                                                           slingshot]]
                        ;; Q: How many of any of the rest of these do I actually use?
                        ;; This one's gone
                        #_[nrepl-inspect "0.3.0"]
@@ -80,13 +82,13 @@
                                                      common-codec
                                                      commons-codec
                                                      org.clojure/clojure
-                                                     org.clojure/tools.reader
+                                                     #_org.clojure/tools.reader
                                                      slingshot]]
                   ;; This next one's super useful, but its dependencies are out of date
                   ;; TODO: Update!
-                  [lein-kibit "0.1.2"]
+                  [lein-kibit "0.1.2" :exclusions [org.clojure/clojure]]
                   [lein-pprint "1.1.1"]
-                  [mvxcvi/whidbey "1.3.0"]]
+                  [mvxcvi/whidbey "1.3.0" :exclusions [org.clojure/clojure]]]
         :repl-options {:nrepl-middleware
                        [inspector.middleware/wrap-inspect
                         ;;ritz.nrepl.middleware.apropos/wrap-apropos
@@ -99,4 +101,4 @@
                   :print-meta true
                   :color-scheme {}
                   :print-color true}}
-  :repl {:plugins [[cider/cider-nrepl "0.10.1" :exclusions [org.clojure/java.classpath]]]}}
+  :repl {:plugins [[cider/cider-nrepl "0.11.0" :exclusions [org.clojure/java.classpath]]]}}
