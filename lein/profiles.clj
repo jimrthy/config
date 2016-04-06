@@ -36,12 +36,12 @@
                        ;; Q: How many of any of the rest of these do I actually use?
                        ;; This one's gone
                        #_[nrepl-inspect "0.3.0"]
-                       [org.codehaus.plexus/plexus-utils "3.0.17"]
+                       [org.codehaus.plexus/plexus-utils "3.0.22"]
                        ;; I use this everywhere. But it doesn't belong in here
                        #_[org.clojure/tools.namespace "0.2.10"]
                        ;; I know I have a lot of projects that transitively rely on this, but they really shouldn't
                        #_[org.clojure/tools.nrepl "0.2.12" :exclusions [org.clojure/clojure]]
-                       [pjstadig/humane-test-output "0.7.0"]
+                       [pjstadig/humane-test-output "0.8.0"]
                        ;; Q: Is there any point to this next one?
                        #_[ritz/ritz-nrepl-middleware "0.7.0"]
                        ;; This approach is long deprecated.
@@ -77,17 +77,15 @@
         ;;:local-repo "repo"
         :plugins [[cider/cider-nrepl "0.11.0" :exclusions [org.clojure/java.classpath]]
                   [com.jakemccrary/lein-test-refresh "0.14.0"]
-                  [jonase/eastwood "0.2.2" :exclusions [org.clojure/clojure]]
-                  [lein-ancient "0.6.8" :exclusions [cheshire
+                  [jonase/eastwood "0.2.3" :exclusions [org.clojure/clojure]]
+                  [lein-ancient "0.6.10" :exclusions [cheshire
                                                      common-codec
                                                      commons-codec
                                                      org.clojure/clojure
                                                      #_org.clojure/tools.reader
                                                      slingshot]]
-                  ;; This next one's super useful, but its dependencies are out of date
-                  ;; TODO: Update!
                   [lein-kibit "0.1.2" :exclusions [org.clojure/clojure]]
-                  [lein-pprint "1.1.1"]
+                  [lein-pprint "1.1.2"]
                   [mvxcvi/whidbey "1.3.0" :exclusions [org.clojure/clojure]]]
         :repl-options {:nrepl-middleware
                        []}
