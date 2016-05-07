@@ -1,5 +1,3 @@
-;; TODO:
-;; Have a :plugins vector.
 {:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}  ; Q: Will I ever find occasion to actually use this?
         :dependencies [[alembic "0.3.2"]   ; Q: what's this really for? A: modifying CLASSPATH at runtime
                        [commons-logging "1.2"]
@@ -13,7 +11,8 @@
                        ;; (I'm pretty sure it doesn't, because my general profiles.clj
                        ;; doesn't have this)
                        #_[im.chit/hara "2.1.11"]
-                       ;; This should probably go away
+                       ;; TODO: Replace this with whatever replaced it
+                       ;; Careful: 0.3.4 was working OK
                        ;; Q: Did hara replace this too?
                        [im.chit/vinyasa "0.4.3" :exclusions [org.codehaus.plexus/plexus-utils]]
                        #_[io.aviso/pretty "0.1.24"]
@@ -76,9 +75,12 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
+        ;; Add [lein-outdated "1.0.0"] to this
+        ;; Q: Hasn't that been replaced by lein-ancient?
         :plugins [[cider/cider-nrepl "0.11.0" :exclusions [org.clojure/java.classpath]]
                   [com.jakemccrary/lein-test-refresh "0.14.0"]
                   [jonase/eastwood "0.2.3" :exclusions [org.clojure/clojure]]
+                  ;; Check for out-dated plugins in here using `lein ancient check-profiles`
                   [lein-ancient "0.6.10" :exclusions [cheshire
                                                       common-codec
                                                       commons-codec
