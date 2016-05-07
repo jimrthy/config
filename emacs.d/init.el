@@ -21,7 +21,11 @@
  '(font-lock-variable-name-face ((t (:foreground "color-52"))))
  '(org-date ((t (:foreground "black" :underline t))))
  '(org-level-3 ((t (:inherit outline-3 :foreground "color-28"))))
- '(org-level-4 ((t (:inherit nil :foreground "color-54")))))
+ '(org-level-4 ((t (:inherit nil :foreground "color-54"))))
+ '(web-mode-doctype-face ((t (:foreground "green"))))
+ '(web-mode-html-attr-name-face ((t (:foreground "cyan"))))
+ '(web-mode-html-tag-bracket-face ((t (:foreground "yellow"))))
+ '(web-mode-html-tag-face ((t (:foreground "brightblue")))))
 
 
 ;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
@@ -56,6 +60,7 @@
 
 (defvar my-packages '(cider
 		      clojure-mode
+                      clojurescript-mode
 		      magit
 		      paredit
                       slamhound
@@ -89,7 +94,7 @@
 ;;;; Clojure
 
 ;;; Clojurescript files should be edited in clojure-mode
-(add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.cljs$" . clojurescript-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljc$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
