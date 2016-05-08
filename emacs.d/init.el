@@ -19,9 +19,11 @@
  '(font-lock-string-face ((t (:foreground "indian red"))))
  '(font-lock-type-face ((t (:foreground "brightblack"))))
  '(font-lock-variable-name-face ((t (:foreground "color-52"))))
+ '(link ((t (:foreground "color-33" :underline t))))
  '(org-date ((t (:foreground "black" :underline t))))
  '(org-level-3 ((t (:inherit outline-3 :foreground "color-28"))))
  '(org-level-4 ((t (:inherit nil :foreground "color-54"))))
+ '(shadow ((t (:foreground "color-58"))))
  '(web-mode-doctype-face ((t (:foreground "green"))))
  '(web-mode-html-attr-name-face ((t (:foreground "cyan"))))
  '(web-mode-html-tag-bracket-face ((t (:foreground "yellow"))))
@@ -104,8 +106,13 @@
   "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'clojure-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
-(add-hook 'scheme-mode-hook (lambda () (paredit-mode +0)))
+(add-hook 'lisp-mode-hook 'paredit-mode)
+(add-hook 'scheme-mode-hook 'paredit-mode)
+
+;;; Q: Do I really need this?
+(require 'magit)
+
+;;; Clojure
 
 ;;; eldoc
 (require 'eldoc)
@@ -116,8 +123,8 @@
 ;; Recommendations from the nrepl README:
 ;; eldoc (shows the args to whichever function you're calling):
 (add-hook 'cider-interaction-mode-hook
-          'cider-turn-on-eldoc-mode)
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+            'eldoc-mode)
+(add-hook 'cider-mode-hook 'eldoc-mode)
 
 ;; turn off auto-complete with tab
 ; (it recommends using M-tab instead)
@@ -179,6 +186,7 @@
 (setq web-mode-engines-alist
       '(("php"   . "\\.phtml\\'")
         ("blade" . "\\.blade\\.")))
+
 ;;; Some conveniences
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)

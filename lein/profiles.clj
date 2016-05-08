@@ -27,7 +27,6 @@
                                                                                            org.apache.maven.wagon/wagon-http-shared4
                                                                                            org.apache.maven.wagon/wagon-provider-api
                                                                                            org.clojure/clojure
-                                                                                           org.clojure/tools.cli
                                                                                            org.clojure/tools.reader
                                                                                            org.jsoup/jsoup
                                                                                            potemkin
@@ -75,10 +74,7 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        ;; Add [lein-outdated "1.0.0"] to this
-        ;; Q: Hasn't that been replaced by lein-ancient?
-        :plugins [[cider/cider-nrepl "0.11.0" :exclusions [org.clojure/java.classpath]]
-                  [com.jakemccrary/lein-test-refresh "0.14.0"]
+        :plugins [[com.jakemccrary/lein-test-refresh "0.14.0"]
                   [jonase/eastwood "0.2.3" :exclusions [org.clojure/clojure]]
                   ;; Check for out-dated plugins in here using `lein ancient check-profiles`
                   [lein-ancient "0.6.10" :exclusions [cheshire
