@@ -5,7 +5,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(indent-tabs-mode nil)
+ '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -25,9 +26,9 @@
  '(org-level-4 ((t (:inherit nil :foreground "color-54"))))
  '(shadow ((t (:foreground "color-58"))))
  '(web-mode-doctype-face ((t (:foreground "green"))))
- '(web-mode-html-attr-name-face ((t (:foreground "cyan"))))
- '(web-mode-html-tag-bracket-face ((t (:foreground "yellow"))))
- '(web-mode-html-tag-face ((t (:foreground "brightblue")))))
+ '(web-mode-html-attr-name-face ((t (:foreground "blue"))))
+ '(web-mode-html-tag-bracket-face ((t (:foreground "brightblack"))))
+ '(web-mode-html-tag-face ((t (:foreground "brightblack")))))
 
 
 ;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
@@ -40,42 +41,44 @@
 ;;; How's that work with multiple clojure projects/REPLs?
 
 ;;; Package Management.
-(if (> emacs-major-version 23)
-    (require 'package)
-  ;; Q: How do I produce a warning?
-  ;; At the very least, magit won't work
-  );;; TODO: Verify that we're on emacs 24
-
-;; Apparently I want this if I'm going to be running
-;; package-initialize myself
-(setq package-enable-at-startup nil)
 ;; There are interesting debates about marmalade vs. melpa.
 ;; These days, there don't seem to be any significant reasons
 ;; to not include both
 (when t (add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/")))
+                     '("marmalade" . "http://marmalade-repo.org/packages/")))
 (when t (add-to-list 'package-archives
-		     '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t))
-(package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents))
+                     '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t))
+(when nil
+  (if (> emacs-major-version 23)
+      (require 'package)
+    ;; Q: How do I produce a warning?
+    ;; At the very least, magit won't work
+    ) ;;; TODO: Verify that we're on emacs 24
 
-(defvar my-packages '(cider
-		      clojure-mode
-                      clojurescript-mode
-		      magit
-		      paredit
-                      slamhound
-		      web-mode))
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+  ;; Apparently I want this if I'm going to be running
+  ;; package-initialize myself
+  (setq package-enable-at-startup nil)
+  (package-initialize)
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+
+  (defvar my-packages '(cider
+                        clojure-mode
+                        clojurescript-mode
+                        magit
+                        paredit
+                        slamhound
+                        web-mode))
+  (dolist (p my-packages)
+    (when (not (package-installed-p p))
+      (package-install p))))
 
 ;;; Luddite Mode
 (cond ((> emacs-major-version 20)
+       ;; Text version doesn't have these modes
        (tool-bar-mode -1)  ; intro'd in emacs 21
-       (menu-bar-mode -1)
        (scroll-bar-mode -1)
+       (menu-bar-mode -1)
        (menu-bar-showhide-fringe-menu-customize-disable)
        (blink-cursor-mode -1)
        (windmove-default-keybindings 'meta)))
@@ -108,11 +111,6 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'lisp-mode-hook 'paredit-mode)
 (add-hook 'scheme-mode-hook 'paredit-mode)
-
-;;; Q: Do I really need this?
-(require 'magit)
-
-;;; Clojure
 
 ;;; eldoc
 (require 'eldoc)
@@ -166,7 +164,7 @@
 (require 'org)
 (require 'ob-clojure)
 (setq org-babel-clojure-backend 'cider)
-(require 'cider)
+(when nil (require 'cider))
 
 ;;; Web Mode
 ;;; (the super-primitive/I-haven't-watched-intro-video version)
@@ -188,8 +186,11 @@
         ("blade" . "\\.blade\\.")))
 
 ;;; Some conveniences
-(setq-default indent-tabs-mode nil)
-(setq tab-width 4)
+(when nil
+  ;; These are set in variables at the top
+  ;; Q: How do I overwrite this for javascript mode?
+  (setq-default indent-tabs-mode nil)
+  (setq tab-width 4))
 (setq default-buffer-file-coding-sstem 'utf-8-unix)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -208,23 +209,25 @@
 
 ;;; Ruby On Rails
 
-;; Rake files are ruby too, as are gemspecs, rackup files, and gemfiles
-(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
+(when nil
+  ;; Rake files are ruby too, as are gemspecs, rackup files, and gemfiles
+  (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode)))
 
 ;; Never want to edit bytecode
 (add-to-list 'completion-ignored-extensions ".rbc")
 (add-to-list 'completion-ignored-extensions ".pyc")
 
 ;; HAML...although the haml mode seems broken
-(add-hook 'haml-mode-hook
-	  (lambda ()
-	    (setq indent-tabs-mode nil)
-	    (define-key haml-mode-map "\C-m" 'newline-and-indent)))
+(when nil
+  (add-hook 'haml-mode-hook
+            (lambda ()
+              (setq indent-tabs-mode nil)
+              (define-key haml-mode-map "\C-m" 'newline-and-indent))))
 
 ;;; Markdown Mode
 ;; Q: Do I need this?

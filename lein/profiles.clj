@@ -58,7 +58,6 @@
                       [alembic.still [distill pull]]  ; Q: what is/was this?
                       [cemerick.pomegranate add-classpath add-dependencies get-classpath resources]
 
-
                       ;;; At least 90% certain that I don't want any of the rest of this
                       ;; Inject into clojure.core
                       clojure.core
