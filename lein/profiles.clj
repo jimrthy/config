@@ -44,7 +44,7 @@
                        ;; Q: Is there any point to this next one?
                        #_[ritz/ritz-nrepl-middleware "0.7.0"]
                        ;; This approach is long deprecated.
-                       ;; See its README and put it into :aliases insted
+                       ;; See its README and put it into :aliases instead
                        #_[slamhound "1.5.5"]
                        [slingshot "0.12.2" :exclusions [org.clojure/clojure]]]
         :injections [(require '[vinyasa.inject :as inject])
