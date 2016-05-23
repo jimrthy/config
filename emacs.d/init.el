@@ -44,34 +44,34 @@
 ;; There are interesting debates about marmalade vs. melpa.
 ;; These days, there don't seem to be any significant reasons
 ;; to not include both
+;; Apparently I want this if I'm going to be running
+;; package-initialize myself (and I do)
+(setq package-enable-at-startup nil)
+(package-initialize)
 (when t (add-to-list 'package-archives
                      '("marmalade" . "http://marmalade-repo.org/packages/")))
 (when t (add-to-list 'package-archives
                      '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t))
-(when nil
-  (if (> emacs-major-version 23)
-      (require 'package)
-    ;; Q: How do I produce a warning?
-    ;; At the very least, magit won't work
-    ) ;;; TODO: Verify that we're on emacs 24
+(if (> emacs-major-version 23)
+    (require 'package)
+  ;; Q: How do I produce a warning?
+  ;; At the very least, magit won't work
+  ) ;;; TODO: Verify that we're on emacs 24
 
-  ;; Apparently I want this if I'm going to be running
-  ;; package-initialize myself
-  (setq package-enable-at-startup nil)
-  (package-initialize)
-  (when (not package-archive-contents)
-    (package-refresh-contents))
 
-  (defvar my-packages '(cider
-                        clojure-mode
-                        clojurescript-mode
-                        magit
-                        paredit
-                        slamhound
-                        web-mode))
-  (dolist (p my-packages)
-    (when (not (package-installed-p p))
-      (package-install p))))
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+(defvar my-packages '(cider
+                      clojure-mode
+                      clojurescript-mode
+                      magit
+                      paredit
+                      slamhound
+                      web-mode))
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 
 ;;; Luddite Mode
 (cond ((> emacs-major-version 20)
@@ -107,10 +107,11 @@
 ;;; paredit
 (autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'clojure-mode-hook 'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-(add-hook 'lisp-mode-hook 'paredit-mode)
-(add-hook 'scheme-mode-hook 'paredit-mode)
+(add-hook 'clojure-mode-hook #'enable-paredit-mode)
+(add-hook 'clojurescript-mode-hook #'enable-paredit-mode)
+(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook #'enable-paredit-mode)
 
 ;;; eldoc
 (require 'eldoc)
@@ -121,7 +122,7 @@
 ;; Recommendations from the nrepl README:
 ;; eldoc (shows the args to whichever function you're calling):
 (add-hook 'cider-interaction-mode-hook
-            'eldoc-mode)
+          'eldoc-mode)
 (add-hook 'cider-mode-hook 'eldoc-mode)
 
 ;; turn off auto-complete with tab
@@ -147,6 +148,12 @@
 ;;(add-hook 'nrepl-mode-hook 'paredit-mode)
 
 (setq nrepl-log-messages t)
+
+;;; Javascript
+(defun jrg-customize-javascript-mode ()
+  (setq indent-tabs-mode t)
+  (setq tab-width 4))
+(add-hook 'javascript-mode-hook #'jrg-customize-javascript-mode)
 
 ;;; Org-mode customizations
 (setq org-todo-keywords
