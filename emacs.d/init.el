@@ -101,7 +101,7 @@
 ;;; Clojurescript files should be edited in clojure-mode
 (add-to-list 'auto-mode-alist '("\.cljs$" . clojurescript-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
-(add-to-list 'auto-mode-alist '("\.cljc$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.cljc$" . clojurec-mode))
 (add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
 
 ;;; paredit
