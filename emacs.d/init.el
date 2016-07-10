@@ -30,7 +30,6 @@
  '(web-mode-html-tag-bracket-face ((t (:foreground "brightblack"))))
  '(web-mode-html-tag-face ((t (:foreground "brightblack")))))
 
-
 ;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
 ;;; There are some interesting-looking settings in there.
 
@@ -40,24 +39,25 @@
 ;;; Probably Better: Don't have so many instances!
 ;;; How's that work with multiple clojure projects/REPLs?
 
+(electric-indent-mode +1)
+
 ;;; Package Management.
-;; There are interesting debates about marmalade vs. melpa.
-;; These days, there don't seem to be any significant reasons
-;; to not include both
 ;; Apparently I want this if I'm going to be running
 ;; package-initialize myself (and I do)
 (setq package-enable-at-startup nil)
 (package-initialize)
-(when t (add-to-list 'package-archives
-                     '("marmalade" . "http://marmalade-repo.org/packages/")))
-(when t (add-to-list 'package-archives
-                     '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t))
+;; There are interesting debates about marmalade vs. melpa.
+;; These days, there don't seem to be any significant reasons
+;; to not include both
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (if (> emacs-major-version 23)
     (require 'package)
   ;; Q: How do I produce a warning?
   ;; At the very least, magit won't work
   ) ;;; TODO: Verify that we're on emacs 24
-
 
 (when (not package-archive-contents)
   (package-refresh-contents))
@@ -81,6 +81,7 @@
        (menu-bar-mode -1)
        (menu-bar-showhide-fringe-menu-customize-disable)
        (blink-cursor-mode -1)
+       ;; Q: What's this next line do?
        (windmove-default-keybindings 'meta)))
 ;; Toggles luddite mode
 (global-set-key [f12] '(lambda ()
@@ -98,7 +99,6 @@
 
 ;;;; Clojure
 
-;;; Clojurescript files should be edited in clojure-mode
 (add-to-list 'auto-mode-alist '("\.cljs$" . clojurescript-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljc$" . clojurec-mode))
