@@ -1,5 +1,9 @@
 [user]
 	name = James Gatannah
-	email = jgatannah@gmail.com
+	email = jamesgatannah@gmail.com
+[color]
+        ui = true
 [core]
-	excludesfile = /home/bp/.gitignore_global
+	excludesfile = /home/james/.gitignore_global
+[push]
+	default = simple

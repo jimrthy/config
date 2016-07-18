@@ -1,9 +1,12 @@
+;;; Auto-customized pieces
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(indent-tabs-mode nil)
+ '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -17,70 +20,99 @@
  '(font-lock-string-face ((t (:foreground "indian red"))))
  '(font-lock-type-face ((t (:foreground "brightblack"))))
  '(font-lock-variable-name-face ((t (:foreground "color-52"))))
+ '(link ((t (:foreground "color-33" :underline t))))
  '(org-date ((t (:foreground "black" :underline t))))
  '(org-level-3 ((t (:inherit outline-3 :foreground "color-28"))))
- '(org-level-4 ((t (:inherit nil :foreground "color-54")))))
-
+ '(org-level-4 ((t (:inherit nil :foreground "color-54"))))
+ '(shadow ((t (:foreground "color-58"))))
+ '(web-mode-doctype-face ((t (:foreground "green"))))
+ '(web-mode-html-attr-name-face ((t (:foreground "blue"))))
+ '(web-mode-html-tag-bracket-face ((t (:foreground "brightblack"))))
+ '(web-mode-html-tag-face ((t (:foreground "brightblack")))))
 
 ;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
 ;;; There are some interesting-looking settings in there.
 
-;;; My vital packages!
-(require 'package)
+;;; This is getting complicated enough that it seems like it just
+;;; might be worth breaking into multiple modules to help with
+;;; startup time.
+;;; Probably Better: Don't have so many instances!
+;;; How's that work with multiple clojure projects/REPLs?
+
+(electric-indent-mode +1)
+
+;;; Package Management.
 ;; Apparently I want this if I'm going to be running
-;; package-initialize myself
+;; package-initialize myself (and I do)
 (setq package-enable-at-startup nil)
+(package-initialize)
 ;; There are interesting debates about marmalade vs. melpa.
 ;; These days, there don't seem to be any significant reasons
 ;; to not include both
-(when t (add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/")))
-(when t (add-to-list 'package-archives
-		     '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t))
-(package-initialize)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+(if (> emacs-major-version 23)
+    (require 'package)
+  ;; Q: How do I produce a warning?
+  ;; At the very least, magit won't work
+  ) ;;; TODO: Verify that we're on emacs 24
+
 (when (not package-archive-contents)
   (package-refresh-contents))
 
 (defvar my-packages '(cider
-		      clojure-mode
-		      magit
-		      paredit
-		      paxedit))
-
-;; Take this away for now, to try to speed up start time
-(when t (dolist (p my-packages)
+                      clojure-mode
+                      clojurescript-mode
+                      magit
+                      paredit
+                      slamhound
+                      web-mode))
+(dolist (p my-packages)
   (when (not (package-installed-p p))
-    (package-install p))))
+    (package-install p)))
+
+;;; Luddite Mode
+(cond ((> emacs-major-version 20)
+       ;; Text version doesn't have these modes
+       (tool-bar-mode -1)  ; intro'd in emacs 21
+       (scroll-bar-mode -1)
+       (menu-bar-mode -1)
+       (menu-bar-showhide-fringe-menu-customize-disable)
+       (blink-cursor-mode -1)
+       ;; Q: What's this next line do?
+       (windmove-default-keybindings 'meta)))
+;; Toggles luddite mode
+(global-set-key [f12] '(lambda ()
+			 (interactive)
+			 (menu-bar-mode nil)
+			 (scroll-bar-mode nil)))
+(defun toggle-mode-line ()
+  "Toggles the modeline on and off"
+  (interactive)
+  (setq mode-line-format
+	(if (equal mode-line-format nil)
+	    (default-value 'mode-line-format)))
+  (redraw-display))
+(global-set-key [M-f12] 'toggle-mode-line)
 
 ;;;; Clojure
 
-;;; Clojurescript files should be edited in clojure-mode
-(add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.cljs$" . clojurescript-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.cljc$" . clojurec-mode))
+(add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
 
-(autoload 'enable-paredit-mode "paredit" 
+;;; paredit
+(autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-(add-hook 'clojure-mode-hook 'paredit-mode)
+(add-hook 'clojure-mode-hook #'enable-paredit-mode)
+(add-hook 'clojurescript-mode-hook #'enable-paredit-mode)
+(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook #'enable-paredit-mode)
 
-;;; Probationary paxedit configuration
-(require 'paxedit)
-(add-hook 'emacs-lisp-mode-hook 'paxedit-mode)
-(add-hook 'clojure-mode-hook 'paxedit-mode)
-(eval-after-load "paxedit"
-  '(progn (define-key paxedit-mode-map (kbd "M-<right>") 'paxedit-transpose-forward)
-	  (define-key paxedit-mode-map (kbd "M-<left>") 'paxedit-transpose-backward)
-	  (define-key paxedit-mode-map (kbd "M-<up>") 'paxedit-backward-up)
-	  (define-key paxedit-mode-map (kbd "M-<down>") 'paxedit-backward-end)
-	  (define-key paxedit-mode-map (kbd "M-b") 'paxedit-previous-symbol)
-	  (define-key paxedit-mode-map (kbd "M-f") 'paxedit-next-symbol)
-	  (define-key paxedit-mode-map (kbd "C-%") 'paxedit-copy)
-	  (define-key paxedit-mode-map (kbd "C-&") 'paxedit-kill)
-	  (define-key paxedit-mode-map (kbd "C-*") 'paxedit-delete)
-	  (define-key paxedit-mode-map (kbd "C-^") 'paxedit-sexp-raise)
-	  (define-key paxedit-mode-map (kbd "M-u") 'paxedit-symbol-change-case)
-	  (define-key paxedit-mode-map (kbd "C-@") 'paxedit-symbol-copy)
-	  (define-key paxedit-mode-map (kbd "C-#") 'paxedit-symbol-kill)))
 ;;; eldoc
 (require 'eldoc)
 (eldoc-add-command
@@ -90,8 +122,8 @@
 ;; Recommendations from the nrepl README:
 ;; eldoc (shows the args to whichever function you're calling):
 (add-hook 'cider-interaction-mode-hook
-          'cider-turn-on-eldoc-mode)
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+          'eldoc-mode)
+(add-hook 'cider-mode-hook 'eldoc-mode)
 
 ;; turn off auto-complete with tab
 ; (it recommends using M-tab instead)
@@ -104,8 +136,7 @@
 (setq cider-xrepl-display-in-current-window t)
 
 ;; Camel Casing
-;; I have mixed feelings about this
-(when t (add-hook 'cider-mode-hook 'subword-mode))
+(add-hook 'cider-mode-hook 'subword-mode)
 
 ;; Use standard clojure-mode faces inside repl:
 (setq cider-repl-use-clojure-font-lock t)
@@ -118,6 +149,11 @@
 
 (setq nrepl-log-messages t)
 
+;;; Javascript
+(defun jrg-customize-javascript-mode ()
+  (setq indent-tabs-mode t)
+  (setq tab-width 4))
+(add-hook 'javascript-mode-hook #'jrg-customize-javascript-mode)
 
 ;;; Org-mode customizations
 (setq org-todo-keywords
@@ -127,9 +163,98 @@
 ; Mark the timestamp a task completed
 (setq org-log-done 'time)
 
+;; capture
+(setq org-default-notes-file "~/projects/todo/notes.org")
+(define-key global-map "\C-cn" 'org-capture)
+
+;; Allow clojure code blocks in org mode
+(require 'org)
+(require 'ob-clojure)
+(setq org-babel-clojure-backend 'cider)
+(when nil (require 'cider))
+
+;;; Web Mode
+;;; (the super-primitive/I-haven't-watched-intro-video version)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+;; Keep around for copy/pasting future file extensions
+(when nil (add-to-list 'auto-mode-alist '("\\.\\'" . web-mode)))
+;; No idea what this might be for
+;; TODO: Actually read the basics on web-mode.org
+(setq web-mode-engines-alist
+      '(("php"   . "\\.phtml\\'")
+        ("blade" . "\\.blade\\.")))
+
+;;; Some conveniences
+(when nil
+  ;; These are set in variables at the top
+  ;; Q: How do I overwrite this for javascript mode?
+  (setq-default indent-tabs-mode nil)
+  (setq tab-width 4))
+(setq default-buffer-file-coding-sstem 'utf-8-unix)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;;; htmlize
+;; TODO: How do I use external CSS?
+(autoload 'htmlize-buffer "htmlize"
+  "Convert buffer to HTML, preserving colors and decorations." t)
+
+;;; slime
+;(load (expand-file-name "~/quicklisp/slime-helper.el"))
+;(setq inferior-lisp-program "ccl")
+;(load "~/quicklisp/log4slime-setup.el")
+;(global-log4slime-mode 1)
+
+(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+
+;;; Ruby On Rails
+
+(when nil
+  ;; Rake files are ruby too, as are gemspecs, rackup files, and gemfiles
+  (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode)))
+
+;; Never want to edit bytecode
+(add-to-list 'completion-ignored-extensions ".rbc")
+(add-to-list 'completion-ignored-extensions ".pyc")
+
+;; HAML...although the haml mode seems broken
+(when nil
+  (add-hook 'haml-mode-hook
+            (lambda ()
+              (setq indent-tabs-mode nil)
+              (define-key haml-mode-map "\C-m" 'newline-and-indent))))
+
+;;; Markdown Mode
+;; Q: Do I need this?
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
 ;; Magic key combinations for working inside tmux over ssh
 ;; put the following line in your ~/.tmux.conf:
 ;;   setw -g xterm-keys on
+
+;; Configuration customizations for running under tmux
+;; Found @
+;; http://unix.stackexchange.com/questions/24414/shift-arrow-not-working-in-emacs-within-tmux
+;; Seems to be needed when .tmux.conf includes
+;; setw -g xterm-keys on
+;; N.B. to get a hint about which key sequence your terminal
+;; is sending, use C-q <chord>
 (when (getenv "TMUX")
     (progn
       (let ((x 2) (tkey ""))
@@ -157,61 +282,91 @@
 	      (setq tkey "C-M-S-"))
 
 	  ;; arrows
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d A" x)) (kbd (format "%s<up>" tkey)))
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d B" x)) (kbd (format "%s<down>" tkey)))
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d C" x)) (kbd (format "%s<right>" tkey)))
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d D" x)) (kbd (format "%s<left>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d A" x)) (kbd (format "%s<up>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d B" x)) (kbd (format "%s<down>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d C" x)) (kbd (format "%s<right>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d D" x)) (kbd (format "%s<left>" tkey)))
 	  ;; home
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d H" x)) (kbd (format "%s<home>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d H" x)) (kbd (format "%s<home>" tkey)))
 	  ;; end
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d F" x)) (kbd (format "%s<end>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d F" x)) (kbd (format "%s<end>" tkey)))
 	  ;; page up
-	  (define-key key-translation-map (kbd (format "M-[ 5 ; %d ~" x)) (kbd (format "%s<prior>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 5 ; %d ~" x)) (kbd (format "%s<prior>" tkey)))
 	  ;; page down
-	  (define-key key-translation-map (kbd (format "M-[ 6 ; %d ~" x)) (kbd (format "%s<next>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 6 ; %d ~" x)) (kbd (format "%s<next>" tkey)))
 	  ;; insert
-	  (define-key key-translation-map (kbd (format "M-[ 2 ; %d ~" x)) (kbd (format "%s<delete>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 2 ; %d ~" x)) (kbd (format "%s<delete>" tkey)))
 	  ;; delete
-	  (define-key key-translation-map (kbd (format "M-[ 3 ; %d ~" x)) (kbd (format "%s<delete>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 3 ; %d ~" x)) (kbd (format "%s<delete>" tkey)))
 	  ;; f1
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d P" x)) (kbd (format "%s<f1>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d P" x)) (kbd (format "%s<f1>" tkey)))
 	  ;; f2
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d Q" x)) (kbd (format "%s<f2>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d Q" x)) (kbd (format "%s<f2>" tkey)))
 	  ;; f3
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d R" x)) (kbd (format "%s<f3>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d R" x)) (kbd (format "%s<f3>" tkey)))
 	  ;; f4
-	  (define-key key-translation-map (kbd (format "M-[ 1 ; %d S" x)) (kbd (format "%s<f4>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 1 ; %d S" x)) (kbd (format "%s<f4>" tkey)))
 	  ;; f5
-	  (define-key key-translation-map (kbd (format "M-[ 15 ; %d ~" x)) (kbd (format "%s<f5>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 15 ; %d ~" x)) (kbd (format "%s<f5>" tkey)))
 	  ;; f6
-	  (define-key key-translation-map (kbd (format "M-[ 17 ; %d ~" x)) (kbd (format "%s<f6>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 17 ; %d ~" x)) (kbd (format "%s<f6>" tkey)))
 	  ;; f7
-	  (define-key key-translation-map (kbd (format "M-[ 18 ; %d ~" x)) (kbd (format "%s<f7>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 18 ; %d ~" x)) (kbd (format "%s<f7>" tkey)))
 	  ;; f8
-	  (define-key key-translation-map (kbd (format "M-[ 19 ; %d ~" x)) (kbd (format "%s<f8>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 19 ; %d ~" x)) (kbd (format "%s<f8>" tkey)))
 	  ;; f9
-	  (define-key key-translation-map (kbd (format "M-[ 20 ; %d ~" x)) (kbd (format "%s<f9>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 20 ; %d ~" x)) (kbd (format "%s<f9>" tkey)))
 	  ;; f10
-	  (define-key key-translation-map (kbd (format "M-[ 21 ; %d ~" x)) (kbd (format "%s<f10>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 21 ; %d ~" x)) (kbd (format "%s<f10>" tkey)))
 	  ;; f11
-	  (define-key key-translation-map (kbd (format "M-[ 23 ; %d ~" x)) (kbd (format "%s<f11>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 23 ; %d ~" x)) (kbd (format "%s<f11>" tkey)))
 	  ;; f12
-	  (define-key key-translation-map (kbd (format "M-[ 24 ; %d ~" x)) (kbd (format "%s<f12>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 24 ; %d ~" x)) (kbd (format "%s<f12>" tkey)))
 	  ;; f13
-	  (define-key key-translation-map (kbd (format "M-[ 25 ; %d ~" x)) (kbd (format "%s<f13>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 25 ; %d ~" x)) (kbd (format "%s<f13>" tkey)))
 	  ;; f14
-	  (define-key key-translation-map (kbd (format "M-[ 26 ; %d ~" x)) (kbd (format "%s<f14>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 26 ; %d ~" x)) (kbd (format "%s<f14>" tkey)))
 	  ;; f15
-	  (define-key key-translation-map (kbd (format "M-[ 28 ; %d ~" x)) (kbd (format "%s<f15>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 28 ; %d ~" x)) (kbd (format "%s<f15>" tkey)))
 	  ;; f16
-	  (define-key key-translation-map (kbd (format "M-[ 29 ; %d ~" x)) (kbd (format "%s<f16>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 29 ; %d ~" x)) (kbd (format "%s<f16>" tkey)))
 	  ;; f17
-	  (define-key key-translation-map (kbd (format "M-[ 31 ; %d ~" x)) (kbd (format "%s<f17>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 31 ; %d ~" x)) (kbd (format "%s<f17>" tkey)))
 	  ;; f18
-	  (define-key key-translation-map (kbd (format "M-[ 32 ; %d ~" x)) (kbd (format "%s<f18>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 32 ; %d ~" x)) (kbd (format "%s<f18>" tkey)))
 	  ;; f19
-	  (define-key key-translation-map (kbd (format "M-[ 33 ; %d ~" x)) (kbd (format "%s<f19>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 33 ; %d ~" x)) (kbd (format "%s<f19>" tkey)))
 	  ;; f20
-	  (define-key key-translation-map (kbd (format "M-[ 34 ; %d ~" x)) (kbd (format "%s<f20>" tkey)))
+	  (define-key key-translation-map
+	    (kbd (format "M-[ 34 ; %d ~" x)) (kbd (format "%s<f20>" tkey)))
 
 	  (setq x (+ x 1))))))
