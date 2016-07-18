@@ -153,7 +153,7 @@
 (defun jrg-customize-javascript-mode ()
   (setq indent-tabs-mode t)
   (setq tab-width 4))
-(add-hook 'javascript-mode-hook #'jrg-customize-javascript-mode)
+(add-hook 'js-mode-hook 'jrg-customize-javascript-mode)
 
 ;;; Org-mode customizations
 (setq org-todo-keywords
