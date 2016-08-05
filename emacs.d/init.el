@@ -6,6 +6,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(indent-tabs-mode nil)
+ '(rainbow-delimiters-max-face-count 1)
  '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -67,6 +68,8 @@
                       clojurescript-mode
                       magit
                       paredit
+                      ;; Proationary mode, to try out only highlighting mismatched parens
+                      rainbow-delimiters
                       slamhound
                       web-mode))
 (dolist (p my-packages)
@@ -113,6 +116,63 @@
 (add-hook 'lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook #'enable-paredit-mode)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Experimental settings that I ran across in a recent blog post
+
+;;; Rainbow Delimiters (experimental, but I already think I approve)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(require 'rainbow-delimiters)
+(set-face-attribute 'rainbow-delimiters-unmatched-face nil
+                    :foreground 'unspecified
+                    :inherit 'error)
+
+;;; Auto-save when losing focus
+;;; e.g. switching from here to a browser for figwheel
+(defun tim-pratley/save-all ()
+  (interactive)
+  (save-some-buffers t))
+(add-hook 'focus-out-hook 'tim-pratley/save-all)
+
+;;; sexp transposition (experimental)
+(defun noprompt/forward-transpose-sexps ()
+  (interactive)
+  (transpose-sexps 1)
+  (paredit-backward))
+(defun noprompt/backward-transpose-sexps ()
+  (interactive)
+  (transpose-sexps 1)
+  (paredit-backward)
+  (paredit-backword))
+;; Q: How do I want to activate these?
+;; The article I'm borrowing this from uses
+;; But that involves also installing the key-chord package.
+;; Q: Do I want that?
+;; A: Nope.
+(when nil
+  (key-chord-define-global "tk" 'noprompt/forward-transpose-sexps)
+  (key-chord-define-global "tj" 'noprompt/backward-transpose-sexps))
+
+;; Send expression directly to REPL buffer (experimental)
+;; It'll be interesting to see how this works out in practice, with
+;; multiple REPL connections
+;; Also experimental
+(defun tim-pratley/cider-eval-expression-at-point-in-repl ()
+  (interactive)
+  (let ((form (cider-defun-at-point)))
+    ;; Strip excess whitespace
+    (while (string-match "\\`\s+\\|\n+\\'" form)
+      (setq form (replace-match "" t t form)))
+    (set-buffer (cider-get-repl-buffer))
+    (goto-char (point-max))
+    (insert form)
+    (cider-repl-return)))
+(require 'cider-mode)
+(define-key cider-mode-map
+  (kbd "C-;") 'tim-pratley/cider-eval-expression-at-point-in-repl)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; End of that experimental block
+
 ;;; eldoc
 (require 'eldoc)
 (eldoc-add-command
@@ -153,6 +213,8 @@
 (defun jrg-customize-javascript-mode ()
   (setq indent-tabs-mode t)
   (setq tab-width 4))
+;; Q: Do I need to #' this or not?
+;; TODO: Check against the version where I actually muck around with javascript
 (add-hook 'js-mode-hook 'jrg-customize-javascript-mode)
 
 ;;; Org-mode customizations
