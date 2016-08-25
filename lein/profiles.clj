@@ -93,4 +93,4 @@
                   :print-meta true
                   :color-scheme {}
                   :print-color true}}
-  :repl {:plugins [[cider/cider-nrepl "0.12.0" :exclusions [org.clojure/java.classpath]]]}}
+  :repl {:plugins [[cider/cider-nrepl "0.13.0" :exclusions [org.clojure/java.classpath]]]}}
