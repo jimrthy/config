@@ -6,6 +6,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(indent-tabs-mode nil)
+ '(rainbow-delimiters-max-face-count 1)
  '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -30,7 +31,6 @@
  '(web-mode-html-tag-bracket-face ((t (:foreground "brightblack"))))
  '(web-mode-html-tag-face ((t (:foreground "brightblack")))))
 
-
 ;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
 ;;; There are some interesting-looking settings in there.
 
@@ -40,38 +40,41 @@
 ;;; Probably Better: Don't have so many instances!
 ;;; How's that work with multiple clojure projects/REPLs?
 
+(electric-indent-mode +1)
+
 ;;; Package Management.
+;; Apparently I want this if I'm going to be running
+;; package-initialize myself (and I do)
+(setq package-enable-at-startup nil)
+(package-initialize)
 ;; There are interesting debates about marmalade vs. melpa.
 ;; These days, there don't seem to be any significant reasons
 ;; to not include both
-(when t (add-to-list 'package-archives
-                     '("marmalade" . "http://marmalade-repo.org/packages/")))
-(when t (add-to-list 'package-archives
-                     '("melpa-stable" . "http://stable.melpa.org/packages/") t))
-(when nil
-  (if (> emacs-major-version 23)
-      (require 'package)
-    ;; Q: How do I produce a warning?
-    ;; At the very least, magit won't work
-    ) ;;; TODO: Verify that we're on emacs 24
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t))
+(if (> emacs-major-version 23)
+    (require 'package)
+  ;; Q: How do I produce a warning?
+  ;; At the very least, magit won't work
+  ) ;;; TODO: Verify that we're on emacs 24
 
-  ;; Apparently I want this if I'm going to be running
-  ;; package-initialize myself
-  (setq package-enable-at-startup nil)
-  (package-initialize)
-  (when (not package-archive-contents)
-    (package-refresh-contents))
+(when (not package-archive-contents)
+  (package-refresh-contents))
 
-  (defvar my-packages '(cider
-                        clojure-mode
-                        clojurescript-mode
-                        magit
-                        paredit
-                        slamhound
-                        web-mode))
-  (dolist (p my-packages)
-    (when (not (package-installed-p p))
-      (package-install p))))
+(defvar my-packages '(cider
+                      clojure-mode
+                      clojurescript-mode
+                      magit
+                      paredit
+                      ;; Proationary mode, to try out only highlighting mismatched parens
+                      rainbow-delimiters
+                      slamhound
+                      web-mode))
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 
 ;;; Luddite Mode
 (cond ((> emacs-major-version 20)
@@ -81,6 +84,7 @@
        (menu-bar-mode -1)
        (menu-bar-showhide-fringe-menu-customize-disable)
        (blink-cursor-mode -1)
+       ;; Q: What's this next line do?
        (windmove-default-keybindings 'meta)))
 ;; Toggles luddite mode
 (global-set-key [f12] '(lambda ()
@@ -98,19 +102,76 @@
 
 ;;;; Clojure
 
-;;; Clojurescript files should be edited in clojure-mode
 (add-to-list 'auto-mode-alist '("\.cljs$" . clojurescript-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
-(add-to-list 'auto-mode-alist '("\.cljc$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.cljc$" . clojurec-mode))
 (add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
 
 ;;; paredit
 (autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'clojure-mode-hook 'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-(add-hook 'lisp-mode-hook 'paredit-mode)
-(add-hook 'scheme-mode-hook 'paredit-mode)
+(add-hook 'clojure-mode-hook #'enable-paredit-mode)
+(add-hook 'clojurescript-mode-hook #'enable-paredit-mode)
+(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook #'enable-paredit-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Experimental settings that I ran across in a recent blog post
+
+;;; Rainbow Delimiters (experimental, but I already think I approve)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(require 'rainbow-delimiters)
+(set-face-attribute 'rainbow-delimiters-unmatched-face nil
+                    :foreground 'unspecified
+                    :inherit 'error)
+
+;;; Auto-save when losing focus
+;;; e.g. switching from here to a browser for figwheel
+(defun tim-pratley/save-all ()
+  (interactive)
+  (save-some-buffers t))
+(add-hook 'focus-out-hook 'tim-pratley/save-all)
+
+;;; sexp transposition (experimental)
+(defun noprompt/forward-transpose-sexps ()
+  (interactive)
+  (transpose-sexps 1)
+  (paredit-backward))
+(defun noprompt/backward-transpose-sexps ()
+  (interactive)
+  (transpose-sexps 1)
+  (paredit-backward)
+  (paredit-backword))
+;; Q: How do I want to activate these?
+;; The article I'm borrowing this from uses
+;; But that involves also installing the key-chord package.
+;; Q: Do I want that?
+;; A: Nope.
+(when nil
+  (key-chord-define-global "tk" 'noprompt/forward-transpose-sexps)
+  (key-chord-define-global "tj" 'noprompt/backward-transpose-sexps))
+
+;; Send expression directly to REPL buffer (experimental)
+;; It'll be interesting to see how this works out in practice, with
+;; multiple REPL connections
+;; Also experimental
+(defun tim-pratley/cider-eval-expression-at-point-in-repl ()
+  (interactive)
+  (let ((form (cider-defun-at-point)))
+    ;; Strip excess whitespace
+    (while (string-match "\\`\s+\\|\n+\\'" form)
+      (setq form (replace-match "" t t form)))
+    (set-buffer (cider-get-repl-buffer))
+    (goto-char (point-max))
+    (insert form)
+    (cider-repl-return)))
+(require 'cider-mode)
+(define-key cider-mode-map
+  (kbd "C-;") 'tim-pratley/cider-eval-expression-at-point-in-repl)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; End of that experimental block
 
 ;;; eldoc
 (require 'eldoc)
@@ -121,7 +182,7 @@
 ;; Recommendations from the nrepl README:
 ;; eldoc (shows the args to whichever function you're calling):
 (add-hook 'cider-interaction-mode-hook
-            'eldoc-mode)
+          'eldoc-mode)
 (add-hook 'cider-mode-hook 'eldoc-mode)
 
 ;; turn off auto-complete with tab
@@ -147,6 +208,14 @@
 ;;(add-hook 'nrepl-mode-hook 'paredit-mode)
 
 (setq nrepl-log-messages t)
+
+;;; Javascript
+(defun jrg-customize-javascript-mode ()
+  (setq indent-tabs-mode t)
+  (setq tab-width 4))
+;; Q: Do I need to #' this or not?
+;; TODO: Check against the version where I actually muck around with javascript
+(add-hook 'js-mode-hook 'jrg-customize-javascript-mode)
 
 ;;; Org-mode customizations
 (setq org-todo-keywords
