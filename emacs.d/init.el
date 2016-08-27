@@ -53,7 +53,7 @@
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
-             '("melpa-stable" . "http://stable.melpa.org/packages/") t))
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (if (> emacs-major-version 23)
     (require 'package)
   ;; Q: How do I produce a warning?
