@@ -1,6 +1,8 @@
 {:user {:aliases {"slamhound" ["run" "-m" "slam.hound"]}  ; Q: Will I ever find occasion to actually use this?
         :dependencies [;; Q: what's this really for? A: modifying CLASSPATH at runtime
                        [alembic "0.3.2" :exclusions [org.tcrawley/dynapath]]
+                       [com.cemerick/pomegranate "0.3.1" :exclusions [org.apache.maven.wagon/wagon-http
+                                                                      org.tcrawley/dynapath]]
                        [commons-logging "1.2"]
                        ;; TODO: Replace this with whatever replaced it
                        ;; Careful: 0.3.4 was working OK
@@ -26,8 +28,6 @@
                                                                                           potemkin
                                                                                           slingshot]]
                        ;; Q: How many of any of the rest of these do I actually use?
-                       ;; This one's gone
-                       #_[nrepl-inspect "0.4.1"]
                        [org.apache.maven.wagon/wagon-provider-api "2.10"]
                        [org.codehaus.plexus/plexus-utils "3.0.24"]
                        ;; I use this everywhere. But it doesn't belong in here
@@ -70,7 +70,7 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[com.jakemccrary/lein-test-refresh "0.16.0"]
+        :plugins [[com.jakemccrary/lein-test-refresh "0.17.0"]
                   [jonase/eastwood "0.2.3" :exclusions [org.clojure/clojure]]
                   ;; Check for out-dated plugins in here using `lein ancient check-profiles`
                   [lein-ancient "0.6.10" :exclusions [cheshire
