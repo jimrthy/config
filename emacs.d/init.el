@@ -274,6 +274,7 @@
 ;(load "~/quicklisp/log4slime-setup.el")
 ;(global-log4slime-mode 1)
 
+(setq tramp-default-method "ssh")
 (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
 ;;; Ruby On Rails
