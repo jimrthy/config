@@ -385,6 +385,7 @@ client.connect_signal("manage", function (c, startup)
 
     -- Enable sloppy focus
     c:connect_signal("mouse::enter", function(c)
+      -- Don't mess w/ Mod4+n minimization
       if not c.minimized then
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
             and awful.client.focus.filter(c) then
