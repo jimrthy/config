@@ -8,9 +8,9 @@
                        ;; Careful: 0.3.4 was working OK
                        ;; Q: Did hara replace this too?
                        #_[im.chit/vinyasa "0.4.7" :exclusions [im.chit/hara.reflect
-                                                             org.clojure/clojure
-                                                             org.codehaus.plexus/plexus-utils
-                                                             org.slf4j/jcl-over-slf4j]]
+                                                               org.clojure/clojure
+                                                               org.codehaus.plexus/plexus-utils
+                                                               org.slf4j/jcl-over-slf4j]]
                        [leiningen #= (leiningen.core.main/leiningen-version) :exclusions [cheshire
                                                                                           com.fasterxml.jackson.core/jackson-core
                                                                                           com.fasterxml.jackson.dataformat/jackson-dataformat-smile
@@ -37,9 +37,6 @@
                        [pjstadig/humane-test-output "0.8.1"]
                        ;; Q: Is there any point to this next one?
                        #_[ritz/ritz-nrepl-middleware "0.7.0"]
-                       ;; This approach is long deprecated.
-                       ;; See its README and put it into :aliases instead
-                       #_[slamhound "1.5.5"]
                        ;; Q: Do I actually use this anywhere/for anything?
                        ;; A: leiningen does.
                        ;; Q: Why am/was I overriding?
