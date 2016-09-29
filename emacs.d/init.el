@@ -17,11 +17,11 @@
  '(font-lock-comment-face ((t (:foreground "medium blue"))))
  '(font-lock-constant-face ((t (:foreground "red"))))
  '(font-lock-function-name-face ((t (:foreground "medium blue"))))
- '(font-lock-keyword-face ((t (:foreground "brightred"))))
+ '(font-lock-keyword-face ((t (:foreground "orange red"))))
  '(font-lock-string-face ((t (:foreground "indian red"))))
- '(font-lock-type-face ((t (:foreground "brightblack"))))
+ '(font-lock-type-face ((t (:foreground "black"))))
  '(font-lock-variable-name-face ((t (:foreground "color-52"))))
- '(link ((t (:foreground "color-33" :underline t))))
+ '(link ((t (:foreground "medium orchid" :underline t))))
  '(org-date ((t (:foreground "black" :underline t))))
  '(org-level-3 ((t (:inherit outline-3 :foreground "color-28"))))
  '(org-level-4 ((t (:inherit nil :foreground "color-54"))))
@@ -274,7 +274,12 @@
 ;(load "~/quicklisp/log4slime-setup.el")
 ;(global-log4slime-mode 1)
 
+(when nil (require 'tramp))
 (setq tramp-default-method "ssh")
+;; I'm pretty sure this worked on xubuntu.
+;; Q: Why isn't it working on Loki?
+;; Hmm...I'm running emacs24 on the former, and 25 on the latter.
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
 ;;; Ruby On Rails
