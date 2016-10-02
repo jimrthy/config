@@ -8,7 +8,7 @@ local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
-require("naughty")
+local naughty = require("naughty")
 
 -- Load Debian menu entries
 require("debian.menu")
