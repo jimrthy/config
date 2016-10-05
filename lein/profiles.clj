@@ -3,20 +3,22 @@
                        [alembic "0.3.2" :exclusions [org.tcrawley/dynapath]]
                        [com.cemerick/pomegranate "0.3.1" :exclusions [org.apache.maven.wagon/wagon-http
                                                                       org.tcrawley/dynapath]]
+                       [commons-io "2.5"]
                        [commons-logging "1.2"]
                        ;; TODO: Replace this with whatever replaced it
                        ;; Careful: 0.3.4 was working OK
                        ;; Q: Did hara replace this too?
                        #_[im.chit/vinyasa "0.4.7" :exclusions [im.chit/hara.reflect
-                                                               org.clojure/clojure
-                                                               org.codehaus.plexus/plexus-utils
-                                                               org.slf4j/jcl-over-slf4j]]
+                                                             org.clojure/clojure
+                                                             org.codehaus.plexus/plexus-utils
+                                                             org.slf4j/jcl-over-slf4j]]
                        [leiningen #= (leiningen.core.main/leiningen-version) :exclusions [cheshire
                                                                                           com.fasterxml.jackson.core/jackson-core
                                                                                           com.fasterxml.jackson.dataformat/jackson-dataformat-smile
                                                                                           #_commons-io
                                                                                           commons-logging
                                                                                           commons-codec
+                                                                                          commons-io
                                                                                           #_org.apache.httpcomponents/httpclient
                                                                                           #_org.apache.httpcomponents/httpcore
                                                                                           #_org.apache.maven.wagon/wagon-http

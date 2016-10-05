@@ -13,23 +13,24 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(font-lock-builtin-face ((t (:foreground "cyan"))))
+ '(font-lock-builtin-face ((t (:foreground "blue"))))
  '(font-lock-comment-face ((t (:foreground "medium blue"))))
  '(font-lock-constant-face ((t (:foreground "red"))))
  '(font-lock-function-name-face ((t (:foreground "medium blue"))))
- '(font-lock-keyword-face ((t (:foreground "orange red"))))
- '(font-lock-string-face ((t (:foreground "indian red"))))
- '(font-lock-type-face ((t (:foreground "black"))))
- '(font-lock-variable-name-face ((t (:foreground "color-52"))))
- '(link ((t (:foreground "medium orchid" :underline t))))
+ '(font-lock-keyword-face ((t (:foreground "tomato"))))
+ '(font-lock-string-face ((t (:foreground "sandy brown"))))
+ '(font-lock-type-face ((t (:foreground "midnight blue"))))
+ '(font-lock-variable-name-face ((t (:foreground "light sea green"))))
+ '(link ((t (:foreground "deep sky blue" :underline t))))
  '(org-date ((t (:foreground "black" :underline t))))
- '(org-level-3 ((t (:inherit outline-3 :foreground "color-28"))))
+ '(org-level-3 ((t (:inherit outline-3 :foreground "brightmagenta"))))
  '(org-level-4 ((t (:inherit nil :foreground "color-54"))))
- '(shadow ((t (:foreground "color-58"))))
+ '(shadow ((t (:foreground "dim gray"))))
  '(web-mode-doctype-face ((t (:foreground "green"))))
  '(web-mode-html-attr-name-face ((t (:foreground "blue"))))
  '(web-mode-html-tag-bracket-face ((t (:foreground "brightblack"))))
  '(web-mode-html-tag-face ((t (:foreground "brightblack")))))
+
 
 ;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
 ;;; There are some interesting-looking settings in there.
@@ -43,13 +44,10 @@
 (electric-indent-mode +1)
 
 ;;; Package Management.
-;; Apparently I want this if I'm going to be running
-;; package-initialize myself (and I do)
-(setq package-enable-at-startup nil)
-(package-initialize)
 ;; There are interesting debates about marmalade vs. melpa.
 ;; These days, there don't seem to be any significant reasons
 ;; to not include both
+(package-initialize)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
@@ -60,6 +58,9 @@
   ;; At the very least, magit won't work
   ) ;;; TODO: Verify that we're on emacs 24
 
+;; Apparently I want this if I'm going to be running
+;; package-initialize myself
+(setq package-enable-at-startup nil)
 (when (not package-archive-contents)
   (package-refresh-contents))
 
