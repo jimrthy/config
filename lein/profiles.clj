@@ -69,7 +69,7 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[com.jakemccrary/lein-test-refresh "0.17.0"]
+        :plugins [[com.jakemccrary/lein-test-refresh "0.18.0"]
                   [jonase/eastwood "0.2.3" :exclusions [org.clojure/clojure]]
                   ;; Check for out-dated plugins in here using `lein ancient check-profiles`
                   [lein-ancient "0.6.10" :exclusions [cheshire
@@ -78,9 +78,9 @@
                                                       org.clojure/clojure
                                                       #_org.clojure/tools.reader
                                                       slingshot]]
-                  [lein-kibit "0.1.2" :exclusions [org.clojure/clojure]]
+                  [lein-kibit "0.1.3" :exclusions [org.clojure/clojure]]
                   [lein-pprint "1.1.2"]
-                  [mvxcvi/whidbey "1.3.0" :exclusions [org.clojure/clojure]]]
+                  [mvxcvi/whidbey "1.3.1" :exclusions [org.clojure/clojure]]]
         :repl-options {:nrepl-middleware
                        []}
         :whidbey {:width 180
@@ -89,4 +89,4 @@
                   :print-meta true
                   :color-scheme {}
                   :print-color true}}
-  :repl {:plugins [[cider/cider-nrepl "0.13.0" :exclusions [org.clojure/java.classpath]]]}}
+  :repl {:plugins [[cider/cider-nrepl "0.14.0" :exclusions [org.clojure/java.classpath]]]}}
