@@ -30,7 +30,7 @@
                                                                                           potemkin
                                                                                           slingshot]]
                        ;; Q: How many of any of the rest of these do I actually use?
-                       [org.apache.maven.wagon/wagon-provider-api "2.10"]
+                       [org.apache.maven.wagon/wagon-provider-api "2.12"]
                        [org.codehaus.plexus/plexus-utils "3.0.24"]
                        ;; I use this everywhere. But it doesn't belong in here
                        #_[org.clojure/tools.namespace "0.2.10"]
