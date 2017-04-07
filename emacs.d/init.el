@@ -261,7 +261,8 @@
   ;; Q: How do I overwrite this for javascript mode?
   (setq-default indent-tabs-mode nil)
   (setq tab-width 4))
-(setq default-buffer-file-coding-sstem 'utf-8-unix)
+(setq default-buffer-file-coding-system 'utf-8-unix)
+(define-coding-system-alias 'UTF-8 'utf-8)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;;; htmlize
