@@ -2,33 +2,35 @@
 # Mostly taken from:
 # https://wiki.archlinux.org/index.php/Xinitrc
 
-# Run init files
+echo "Running init files"
 if [ -d /etc/X11/xinit/xinitrc.d ]; then
   for f in /etc/X11/xinit/xinitrc.d/*; do
-    [-x "$f" ] && . "$f"
+    [ -x "$f" ] && . "$f"
   done
   unset f
 fi
 
+echo "Setting keyboard map"
 setxkbmap -layout dvorak
 
-# update x resources db
-[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+echo "Updating x resources db"
+[ -f ~/.Xresources ] && xrdb -merge ~/.Xresources
 
-# starts screensaver daemon
+echo "Starting screensaver daemon"
 xscreensaver -no-splash &
 
-# sets the cursor icon
-xsetroot -curson_name left_ptr &
+echo "Setting the cursor icon"
+xsetroot -cursor_name left_ptr &
 
 # Well, I'd want to do this if my keyboard hadn't already moved capslock:
+# TODO: Restore this
 # (of course, that also implies *writing* .Xmodmap)
-xmodmap ~/.Xmodmap
+#xmodmap ~/.Xmodmap
 
 # X wants to swap my monitors' location. I need to fix that.
 #xrandr --output DVI-D-0 --left-of DVI-I-1
 
-# Pick a window manager:
+echo "Picking a window manager"
 case $1 in
   xfce) exec startxfce4;;
   xmonad) exec xmonad;;
