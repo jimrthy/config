@@ -5,9 +5,6 @@ ZSH=$HOME/.oh-my-zsh
 # Just because I like this one doesn't mean anyone else will
 ZSH_THEME="jimrthy"
 
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-COMPLETION_WAITING_DOTS="true"
-
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
@@ -47,7 +44,7 @@ COMPLETION_WAITING_DOTS="true"
 # Home configuration is
 # plugins=(git history lein tmux)
 # Q: Do I want any of those here?
-plugins=(git zsh-nvm)
+plugins=(git nvm)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -63,9 +60,6 @@ export EDITOR=vim
 # The docker version manager
 # c.f. https://github.com/getcarina/dvm
 #source $HOME/.dvm/dvm.sh
-
-# node.js version manager
-#source $HOME/tools/nvm/nvm.sh
 
 # This is a matter of taste. Some people actually like having their
 # shells share all the history.
