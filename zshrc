@@ -1,9 +1,9 @@
 # Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+#ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Just because I like this one doesn't mean anyone else will
-ZSH_THEME="jimrthy"
+#ZSH_THEME="jimrthy"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -42,11 +42,27 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Home configuration is
-# plugins=(git history lein tmux)
+# plugins=(git history lein tmux zsh-nvm)
 # Q: Do I want any of those here?
-plugins=(git nvm)
+# A: Almost definitely not, assuming
+# I'm serious about switching to
+# antigen
 
-source $ZSH/oh-my-zsh.sh
+#source $ZSH/oh-my-zsh.sh
+#ANTIGEN_CACHE_ENABLED="false"
+#ANTIGEN_LOG=$HOME/antigen.log
+source $HOME/tools/antigen/antigen.zsh
+antigen use oh-my-zsh
+
+antigen bundle git
+#antigen bundle pip
+#antigen bundle lein
+antigen bundle command-not-found
+#antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle lukechilds/zsh-nvm
+
+antigen theme https://github.com/jimrthy/config jimrthy
+antigen apply
 
 # Customize to your needs...
 export "PATH=$PATH:/usr/local/bin:$HOME/bin"
