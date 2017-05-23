@@ -57,6 +57,7 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
+-- TODO: Go back to default version so I can cycle back through them
 layouts =
 {
     awful.layout.suit.tile,
@@ -76,8 +77,11 @@ layouts =
 
 -- {{{ Wallpaper
 if beautiful.wallpaper then
-  for s = 1, screen.count() do
-     gears.wallpaper.maximized(beautiful.wallpaper[s], s, true)
+   for s = 1, screen.count() do
+      -- might make more sense to do something more like
+      -- using s*9 for the index here, assuming I'm going to
+      -- have a different background for each tag/screen
+      gears.wallpaper.maximized(beautiful.wallpaper[s], s, true)
   end
 end
 -- }}}
@@ -95,8 +99,13 @@ for s = 1, screen.count() do
    for t = 1, tag.instances() do
       tags[s][t]:connect_signal("property::selected", function(tag)
                                if tag.selected then
-                                  --surf = gears.wallpaper.prepare_context(s)
-                                  --gears.wallpaper.maximized(beautiful.wallpaper[tag.index], s, false)
+                                  -- Assuming I'm going to have a different wallpaper for each tag/screen
+                                  -- combo, the index needs to be ((s - 1) * 9) + t
+                                  -- Although, really, would that be a good idea?
+                                  -- I mostly just need a different screen inside my VMs to
+                                  -- help me track which of those I'm using.
+                                  -- After all, I don't actually see my wallpaper all
+                                  -- that often
                                   gears.wallpaper.maximized(beautiful.wallpaper[t], s, false)
                                end
                            end)
