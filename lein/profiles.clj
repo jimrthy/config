@@ -15,10 +15,9 @@
                        [leiningen #= (leiningen.core.main/leiningen-version) :exclusions [cheshire
                                                                                           com.fasterxml.jackson.core/jackson-core
                                                                                           com.fasterxml.jackson.dataformat/jackson-dataformat-smile
-                                                                                          #_commons-io
-                                                                                          commons-logging
                                                                                           commons-codec
                                                                                           commons-io
+                                                                                          commons-logging
                                                                                           #_org.apache.httpcomponents/httpclient
                                                                                           #_org.apache.httpcomponents/httpcore
                                                                                           #_org.apache.maven.wagon/wagon-http
@@ -36,7 +35,7 @@
                        #_[org.clojure/tools.namespace "0.2.10"]
                        ;; I know I have a lot of projects that transitively rely on this, but they really shouldn't
                        #_[org.clojure/tools.nrepl "0.2.12" :exclusions [org.clojure/clojure]]
-                       [pjstadig/humane-test-output "0.8.1"]
+                       [pjstadig/humane-test-output "0.8.2"]
                        ;; Q: Is there any point to this next one?
                        #_[ritz/ritz-nrepl-middleware "0.7.0"]
                        ;; Q: Do I actually use this anywhere/for anything?
@@ -69,8 +68,8 @@
                      (require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
         ;;:local-repo "repo"
-        :plugins [[com.jakemccrary/lein-test-refresh "0.18.0"]
-                  [jonase/eastwood "0.2.3" :exclusions [org.clojure/clojure]]
+        :plugins [[com.jakemccrary/lein-test-refresh "0.20.0"]
+                  [jonase/eastwood "0.2.4" :exclusions [org.clojure/clojure]]
                   ;; Check for out-dated plugins in here using `lein ancient check-profiles`
                   [lein-ancient "0.6.10" :exclusions [cheshire
                                                       common-codec
@@ -78,7 +77,7 @@
                                                       org.clojure/clojure
                                                       #_org.clojure/tools.reader
                                                       slingshot]]
-                  [lein-kibit "0.1.3" :exclusions [org.clojure/clojure]]
+                  [lein-kibit "0.1.5" :exclusions [org.clojure/clojure]]
                   [lein-pprint "1.1.2"]
                   [mvxcvi/whidbey "1.3.1" :exclusions [org.clojure/clojure]]]
         :repl-options {:nrepl-middleware
@@ -89,4 +88,4 @@
                   :print-meta true
                   :color-scheme {}
                   :print-color true}}
-  :repl {:plugins [[cider/cider-nrepl "0.14.0" :exclusions [org.clojure/java.classpath]]]}}
+ :repl {:plugins [[cider/cider-nrepl "0.14.0" :exclusions [org.clojure/java.classpath]]]}}
