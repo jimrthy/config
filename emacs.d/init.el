@@ -6,7 +6,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(indent-tabs-mode nil)
+ '(package-selected-packages
+   (quote
+    (web-mode string-edit scss-mode scala-mode2 rainbow-delimiters paxedit markdown-mode magit latest-clojars htmlize haml-mode gandalf-theme clojurescript-mode clojure-quick-repls)))
  '(rainbow-delimiters-max-face-count 1)
+ '(safe-local-variable-values
+   (quote
+    ((cider-boot-parameters . "cider repl -s ...others... wait"))))
  '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -69,9 +75,9 @@
                       clojurescript-mode
                       magit
                       paredit
-                      ;; Proationary mode, to try out only highlighting mismatched parens
                       rainbow-delimiters
-                      slamhound
+                      ;; Probationary
+                      sayid
                       web-mode))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
@@ -117,15 +123,20 @@
 (add-hook 'lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook #'enable-paredit-mode)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; Experimental settings that I ran across in a recent blog post
-
-;;; Rainbow Delimiters (experimental, but I already think I approve)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (require 'rainbow-delimiters)
 (set-face-attribute 'rainbow-delimiters-unmatched-face nil
                     :foreground 'unspecified
                     :inherit 'error)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Sayid
+;;; Q: Is this as awesome as advertised?
+(eval-after-load 'clojure-mode
+  '(sayid-setup-package))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Experimental settings that I ran across in a recent blog post
 
 ;;; Auto-save when losing focus
 ;;; e.g. switching from here to a browser for figwheel
@@ -153,6 +164,10 @@
   (key-chord-define-global "tk" 'noprompt/forward-transpose-sexps)
   (key-chord-define-global "tj" 'noprompt/backward-transpose-sexps))
 
+;; Using figwheel
+(setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api)
+    (start-figwheel!)
+    (cljs-repl))")
 ;; Send expression directly to REPL buffer (experimental)
 ;; It'll be interesting to see how this works out in practice, with
 ;; multiple REPL connections
