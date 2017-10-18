@@ -109,32 +109,6 @@ if theme then
                 if tag.selected then
                   n = (s-1)*tag_count + t;
                   wallpaper = theme.wallpaper[n];
-      --            local msg = "Theme "..t.." on screen ";
-      --            msg = msg..s..": ";
-      --            if theme[t] then
-      --              local msg = msg..(theme[t]);
-      --            else
-      --              local count = 0
-      --              key_list = ""
-      --              for k, v in pairs(theme) do 
-      --                count = count + 1
-      --                key_list = key_list .. ", " .. k
-      --              end
-      --              msg = msg .. "Missing among "..count..": "..key_list;
-      --                msg = msg .. "Missing, but we *do* have wallpaper: "..theme.wallpaper;
-      --            end
---              msg = "Switching to wallpaper "..n.." of ".. #theme.wallpaper
---              msg = msg .. screen_count .. " on tag " .. t;
---              naughty.notify({ preset = naughty.config.presets.critical,
---                              title = "Missing",
---                              text = msg });
-                      -- Assuming I'm going to have a different wallpaper for each tag/screen
-                      -- combo, the index needs to be ((s - 1) * 9) + t
-                      -- Although, really, would that be a good idea?
-                      -- I mostly just need a different screen inside my VMs to
-                      -- help me track which of those I'm using.
-                      -- After all, I don't actually see my wallpaper all
-                      -- that often
                   gears.wallpaper.maximized(wallpaper, s, false);
                 end
               end)
@@ -152,24 +126,6 @@ if theme then
           end
       end
   end
-else
-  msg = "";
-  for k, v in pairs (beautiful) do
-    msg = msg .. "\n" .. k .. " : ";
-    t = type(v);
-    if "function" == t or "table" == t then
-      msg = msg .. "(a function)";
-    else
-      msg = msg .. v;
-    end
-  end
-  naughty.notify({ preset = naughty.config.presets.normal,
-                   title = "No wallpaper",
-                   text =  msg});
-  theme = beautiful.get();
-  naughty.notify({ preset = naughty.config.presets.normal,
-                   title = "But",
-                   text =  "Theme is " .. (theme or "nil" ) });
 end
 -- }}}
 
