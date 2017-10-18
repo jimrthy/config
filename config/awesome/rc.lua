@@ -57,7 +57,6 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
--- TODO: Go back to default version so I can cycle back through them
 layouts =
 {
     awful.layout.suit.tile,
@@ -95,21 +94,82 @@ end
 -- }}}
 
 -- {{{ Tag Wallpapers
-for s = 1, screen.count() do
-   for t = 1, tag.instances() do
-      tags[s][t]:connect_signal("property::selected", function(tag)
-                               if tag.selected then
-                                  -- Assuming I'm going to have a different wallpaper for each tag/screen
-                                  -- combo, the index needs to be ((s - 1) * 9) + t
-                                  -- Although, really, would that be a good idea?
-                                  -- I mostly just need a different screen inside my VMs to
-                                  -- help me track which of those I'm using.
-                                  -- After all, I don't actually see my wallpaper all
-                                  -- that often
-                                  gears.wallpaper.maximized(beautiful.wallpaper[t], s, false)
-                               end
-                           end)
-   end
+theme = beautiful.get();
+if theme then
+  local screen_count = screen.count();
+  local tag_count = tag.instances()/screen_count;
+  for s = 1, screen_count do
+    for t = 1, tag_count do
+      --    naughty.notify({ preset = naughty.config.presets.critical,
+          --                     title = "Connecting",
+          --                     text = "Tag " .. t .. " of " .. tag.instances() .. " on screen " .. s });
+    if tags[s] then
+      if tags[s][t] then
+        tags[s][t]:connect_signal("property::selected", function(tag)
+                if tag.selected then
+                  n = (s-1)*tag_count + t;
+                  wallpaper = theme.wallpaper[n];
+      --            local msg = "Theme "..t.." on screen ";
+      --            msg = msg..s..": ";
+      --            if theme[t] then
+      --              local msg = msg..(theme[t]);
+      --            else
+      --              local count = 0
+      --              key_list = ""
+      --              for k, v in pairs(theme) do 
+      --                count = count + 1
+      --                key_list = key_list .. ", " .. k
+      --              end
+      --              msg = msg .. "Missing among "..count..": "..key_list;
+      --                msg = msg .. "Missing, but we *do* have wallpaper: "..theme.wallpaper;
+      --            end
+--              msg = "Switching to wallpaper "..n.." of ".. #theme.wallpaper
+--              msg = msg .. screen_count .. " on tag " .. t;
+--              naughty.notify({ preset = naughty.config.presets.critical,
+--                              title = "Missing",
+--                              text = msg });
+                      -- Assuming I'm going to have a different wallpaper for each tag/screen
+                      -- combo, the index needs to be ((s - 1) * 9) + t
+                      -- Although, really, would that be a good idea?
+                      -- I mostly just need a different screen inside my VMs to
+                      -- help me track which of those I'm using.
+                      -- After all, I don't actually see my wallpaper all
+                      -- that often
+                  gears.wallpaper.maximized(wallpaper, s, false);
+                end
+              end)
+            else
+              msg = "Screen " .. s .. " of ";
+              msg = msg .. screen_count .. " on tag " .. t;
+              naughty.notify({ preset = naughty.config.presets.critical,
+                              title = "Missing",
+                              text = msg });
+            end
+          else
+            naughty.notify({ preset = naughty.config.presets.critical,
+                            title = "Missing",
+                            text = "Tag " .. s .. " of " .. screen.instances() .. " on screen " .. t });
+          end
+      end
+  end
+else
+  msg = "";
+  for k, v in pairs (beautiful) do
+    msg = msg .. "\n" .. k .. " : ";
+    t = type(v);
+    if "function" == t or "table" == t then
+      msg = msg .. "(a function)";
+    else
+      msg = msg .. v;
+    end
+  end
+  naughty.notify({ preset = naughty.config.presets.normal,
+                   title = "No wallpaper",
+                   text =  msg});
+  theme = beautiful.get();
+  naughty.notify({ preset = naughty.config.presets.normal,
+                   title = "But",
+                   text =  "Theme is " .. (theme or "nil" ) });
 end
 -- }}}
 
