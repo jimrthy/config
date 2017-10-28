@@ -5,8 +5,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(frame-background-mode (quote light))
  '(indent-tabs-mode nil)
  '(rainbow-delimiters-max-face-count 1)
+ '(safe-local-variable-values
+   (quote
+    ((cider-boot-parameters . "cider repl -s ...others... wait"))))
  '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -47,6 +51,7 @@
 ;; There are interesting debates about marmalade vs. melpa.
 ;; These days, there don't seem to be any significant reasons
 ;; to not include both
+(setq package-enable-at-startup nil)
 (package-initialize)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
@@ -67,6 +72,7 @@
 (defvar my-packages '(cider
                       clojure-mode
                       clojurescript-mode
+                      ;;kibit-helper  ; Q: Do I really want this?
                       magit
                       paredit
                       ;; Proationary mode, to try out only highlighting mismatched parens
@@ -152,6 +158,14 @@
 (when nil
   (key-chord-define-global "tk" 'noprompt/forward-transpose-sexps)
   (key-chord-define-global "tj" 'noprompt/backward-transpose-sexps))
+
+;; Use figwheel
+;; Or maybe not, if I'm switching everything interesting to boot
+(when nil
+  (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl.api)
+    (start-figwheel!)
+    (cljs-repl))"))
+
 
 ;; Send expression directly to REPL buffer (experimental)
 ;; It'll be interesting to see how this works out in practice, with
