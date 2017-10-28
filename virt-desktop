@@ -1,0 +1,3 @@
+#! /bin/sh
+
+xrandr --output LVDS1 --rate 60 --mode 1366x768 --fb 1600x1050 --panning 1600x1050
