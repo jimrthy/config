@@ -49,6 +49,7 @@
 ;;; How's that work with multiple clojure projects/REPLs?
 
 (electric-indent-mode +1)
+(setq column-number-mode t)
 
 ;;; Package Management.
 ;; There are interesting debates about marmalade vs. melpa.
@@ -72,7 +73,8 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar my-packages '(cider
+(defvar my-packages '(ace-window
+                      cider
                       clojure-mode
                       clojurescript-mode
                       ;;kibit-helper  ; Q: Do I really want this?
@@ -109,6 +111,9 @@
 	    (default-value 'mode-line-format)))
   (redraw-display))
 (global-set-key [M-f12] 'toggle-mode-line)
+
+;;; Ace-window
+(global-set-key (kbd "M-p") 'ace-window)
 
 ;;;; Clojure
 
@@ -254,6 +259,7 @@
 
 ;; Allow clojure code blocks in org mode
 (require 'org)
+(define-key org-mode-map (kbd "<backtab>") nil)
 (require 'ob-clojure)
 (setq org-babel-clojure-backend 'cider)
 (when nil (require 'cider))
