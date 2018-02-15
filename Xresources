@@ -1,2 +1,4 @@
 URxvt*iso14755: False
-URxvt.iso14755_52: False
+URxvt*iso14755_52: False
+URxvt*background: ivory
+URxvt*foreground: black
