@@ -121,6 +121,7 @@
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljc$" . clojurec-mode))
 (add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\.hy$" . clojure-mode))
 
 ;;; paredit
 (autoload 'enable-paredit-mode "paredit"
