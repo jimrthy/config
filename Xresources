@@ -2,3 +2,5 @@ URxvt*iso14755: False
 URxvt*iso14755_52: False
 URxvt*background: ivory
 URxvt*foreground: black
+! On newer ubuntu versions, there's wonkiness with my prompt without this
+URxvt.letterSpace: 0

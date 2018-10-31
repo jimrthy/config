@@ -52,13 +52,8 @@
 (setq column-number-mode t)
 
 ;;; Package Management.
-;; There are interesting debates about marmalade vs. melpa.
-;; These days, there don't seem to be any significant reasons
-;; to not include both
 (setq package-enable-at-startup nil)
 (package-initialize)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (if (> emacs-major-version 23)
