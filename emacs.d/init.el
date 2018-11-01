@@ -9,7 +9,7 @@
  '(indent-tabs-mode nil)
  '(package-selected-packages
    (quote
-    (web-mode string-edit scss-mode scala-mode2 rainbow-delimiters paxedit markdown-mode magit latest-clojars htmlize haml-mode gandalf-theme clojurescript-mode clojure-quick-repls)))
+    (web-mode string-edit scss-mode scala-mode2 rainbow-delimiters paxedit markdown-mode magit latest-clojars htmlize haml-mode gandalf-theme clojure-quick-repls)))
  '(rainbow-delimiters-max-face-count 1)
  '(safe-local-variable-values
    (quote
@@ -71,7 +71,6 @@
 (defvar my-packages '(ace-window
                       cider
                       clojure-mode
-                      clojurescript-mode
                       ;;kibit-helper  ; Q: Do I really want this?
                       magit
                       paredit
@@ -112,7 +111,7 @@
 
 ;;;; Clojure
 
-(add-to-list 'auto-mode-alist '("\.cljs$" . clojurescript-mode))
+(add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljx$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.cljc$" . clojurec-mode))
 (add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
@@ -122,7 +121,6 @@
 (autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'clojure-mode-hook #'enable-paredit-mode)
-(add-hook 'clojurescript-mode-hook #'enable-paredit-mode)
 (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook #'enable-paredit-mode)
