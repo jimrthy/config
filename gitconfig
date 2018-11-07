@@ -5,5 +5,7 @@
         ui = true
 [core]
 	excludesfile = /home/james/.gitignore_global
+[pager]
+	branch = false
 [push]
 	default = simple
