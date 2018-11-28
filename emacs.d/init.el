@@ -9,7 +9,7 @@
  '(indent-tabs-mode nil)
  '(package-selected-packages
    (quote
-    (web-mode string-edit scss-mode scala-mode2 rainbow-delimiters paxedit markdown-mode magit latest-clojars htmlize haml-mode gandalf-theme clojure-quick-repls)))
+    (lua-mode web-mode string-edit scss-mode scala-mode2 rainbow-delimiters paxedit markdown-mode magit latest-clojars htmlize haml-mode gandalf-theme clojure-quick-repls)))
  '(rainbow-delimiters-max-face-count 1)
  '(safe-local-variable-values
    (quote
