@@ -27,7 +27,7 @@ function hg_prompt_info {
 patches: <patches|join( → )|pre_applied(%{$fg[yellow]%})|post_applied(%{$reset_color%})|pre_unapplied(%{$fg_bold[black]%})|post_unapplied(%{$reset_color%})>>" 2>/dev/null
 }
 
-USER='%{fg[blue]%}%n@%M%{$reset_color%}'
+#USER='%{fg[blue]%}%n@%M%{$reset_color%}'
 #LOCATION=' at %{fg[green]%}(collapse_pwd)%{reset_color%}
 LOCATION=' at %{fg[green]%}${PWD/#$HOME/~}%{reset_color%}'
 
