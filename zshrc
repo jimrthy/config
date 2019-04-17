@@ -71,6 +71,7 @@ export EDITOR=vim
 # Really depends on whether this is a python dev system or not
 # It's pretty rare that I don't want this, though it's important to remember
 # to install this via pip rather than any "standard" package manager
+#export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 #source /usr/local/bin/virtualenvwrapper.sh
 
 # The docker version manager
