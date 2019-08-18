@@ -117,6 +117,9 @@
 (add-to-list 'auto-mode-alist '("\.pxi$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.hy$" . clojure-mode))
 
+;;; magit
+(global-set-key (kbd "C-x g") 'magit-status)
+
 ;;; paredit
 (autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code." t)
