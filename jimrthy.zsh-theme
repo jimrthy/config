@@ -42,7 +42,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 #$(prompt_char) '
 
 PROMPT='
-%{$fg[blue]%}%n@%M%{$reset_color%} at %%%{$fg[green]%}${PWD/#$HOME/~}%{$reset_color%} @ %{$fg[red]%}%*% %{$reset_color%}
+%{$fg[blue]%}%n@%M%{$reset_color%} at %{$fg[green]%}${PWD/#$HOME/~}%{$reset_color%} @ %{$fg[red]%}%*% %{$reset_color%}
 $(prompt_char) '
 
-RPROMPT='$(check_last_exit_code)$(hg_prompt_info)$(git_prompt_info)'
+#RPROMPT='$(check_last_exit_code)$(hg_prompt_info)$(git_prompt_info)'
+RPROMPT='$(check_last_exit_code)$(git_prompt_info)'
