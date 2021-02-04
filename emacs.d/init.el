@@ -73,11 +73,13 @@
                       clojure-mode
                       ;;kibit-helper  ; Q: Do I really want this?
                       magit
+                      markdown-mode
                       paredit
                       rainbow-delimiters
                       ;; Probationary
                       sayid
-                      web-mode))
+                      web-mode
+                      yaml-mode))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
