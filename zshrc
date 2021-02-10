@@ -61,7 +61,7 @@ antigen bundle command-not-found
 #antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle lukechilds/zsh-nvm
 
-antigen theme https://github.com/jimrthy/config jimrthy
+antigen theme https://github.com/jimrthy/config jimrthy --branch=main
 antigen apply
 
 # Customize to your needs...
