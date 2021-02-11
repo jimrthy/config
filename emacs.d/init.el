@@ -75,6 +75,7 @@
                       magit
                       markdown-mode
                       paredit
+                      python-black
                       rainbow-delimiters
                       ;; Probationary
                       sayid
