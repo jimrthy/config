@@ -9,7 +9,7 @@
  '(indent-tabs-mode nil)
  '(package-selected-packages
    (quote
-    (lua-mode web-mode string-edit scss-mode scala-mode2 rainbow-delimiters paxedit markdown-mode magit latest-clojars htmlize haml-mode gandalf-theme clojure-quick-repls)))
+    (ace-window cider clojure-quick-repls gandalf-theme haml-mode htmlize latest-clojars lua-mode magit markdown-mode paredit paxedit rainbow-delimiters scala-mode2 scss-mode string-edit web-mode)))
  '(rainbow-delimiters-max-face-count 1)
  '(safe-local-variable-values
    (quote
@@ -38,6 +38,19 @@
  '(web-mode-html-tag-bracket-face ((t (:foreground "brightblack"))))
  '(web-mode-html-tag-face ((t (:foreground "brightblack")))))
 
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	 'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 
 ;;; Take a look at http://www.cs.utah.edu/~aek/code/init.el.html
 ;;; There are some interesting-looking settings in there.
@@ -52,21 +65,23 @@
 (setq column-number-mode t)
 
 ;;; Package Management.
-(setq package-enable-at-startup nil)
-(package-initialize)
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
-(if (> emacs-major-version 23)
-    (require 'package)
-  ;; Q: How do I produce a warning?
-  ;; At the very least, magit won't work
-  ) ;;; TODO: Verify that we're on emacs 24
 
-;; Apparently I want this if I'm going to be running
-;; package-initialize myself
-(setq package-enable-at-startup nil)
-(when (not package-archive-contents)
-  (package-refresh-contents))
+;; This block goes away when we switch to straight.el
+(when nil
+  (setq package-enable-at-startup nil)
+  (package-initialize)
+  (add-to-list 'package-archives
+	       '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+  (if (> emacs-major-version 23)
+      (require 'package)
+    ;; Q: How do I produce a warning?
+    ;; At the very least, magit won't work
+    )
+  ;; Apparently I want this if I'm going to be running
+  ;; package-initialize myself
+  (setq package-enable-at-startup nil)
+  (when (not package-archive-contents)
+    (package-refresh-contents)))
 
 (defvar my-packages '(ace-window
                       cider
@@ -78,12 +93,22 @@
                       python-black
                       rainbow-delimiters
                       ;; Probationary
-                      sayid
+                      ;sayid
                       web-mode
                       yaml-mode))
+;; Swap this approach out it favor of straight.el
+(when nil
+  (dolist (p my-packages)
+    (when (not (package-installed-p p))
+      (package-install p))))
+;; Load them this way instead
 (dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+  (straight-use-package p))
+
+;; Still want to browse MELPA using package-list-packages
+(package-initialize)
+(add-to-list 'package-archives
+	     '("melpa-stable" . "http://stable.melpa.org/packages") t)
 
 ;;; Luddite Mode
 (cond ((> emacs-major-version 20)
@@ -140,8 +165,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Sayid
 ;;; Q: Is this as awesome as advertised?
-(eval-after-load 'clojure-mode
-  '(sayid-setup-package))
+(when nil
+  (eval-after-load 'clojure-mode
+    '(sayid-setup-package)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Experimental settings that I ran across in a recent blog post
